@@ -8,7 +8,7 @@ Plots an rpart object on the current graphics device.
 }
 \usage{
 \method{plot}{rpart}(x, uniform=FALSE, branch=1, compress=FALSE, nspace,
-     margin=0, minbranch=.3, bar, ms.fudge = TRUE,\dots)
+     margin=0, minbranch=.3, bar, ms.fudge = FALSE,\dots)
 }
 \arguments{
 \item{x}{
@@ -57,7 +57,7 @@ leaves no room to squeeze in node labels.
  length of bar at root (default = 0.03) -- used instead of char "|"
 }
 \item{ms.fudge}{
-If \code{TRUE} adjust "legs" of plots to avoid MicroSoft metafile stuff-ups!!
+If \code{FALSE} adjust "legs" of plots to avoid MicroSoft metafile stuff-ups!!
 }
 \item{\dots}{
   arguments to be passed to or from other methods.

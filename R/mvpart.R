@@ -1,16 +1,16 @@
 .packageName <- "mvpart"
 
-# SCCS  @(#)formatg.s	1.3 06/06/01
+# SCCS  @(#)formatg.s   1.3 06/06/01
 # format a set of numbers using C's "g" format
 #  It is applied on an element by element basis, which is more
 #  appropriate for rpart output than the standard Splus format()
 #  command.
 # For instance if x=(123, 1.23, .00123)
-#	  format(x) = "123.00000", "1.23000", "0.00123"
+#     format(x) = "123.00000", "1.23000", "0.00123"
 #  but formatg does not add all of those zeros to the first two numbers
 #
 formatg <- function(x, digits= unlist(options('digits')),
-		         format= paste("%.", digits, "g", sep='')) {
+                 format= paste("%.", digits, "g", sep='')) {
     if (!is.numeric(x)) stop("x must be a numeric vector")
 
     n <- length(x)
@@ -20,7 +20,7 @@ formatg <- function(x, digits= unlist(options('digits')),
     #   dddd are the 4 significant digits.
     dummy  <- paste(rep(" ", digits+8), collapse='')
     temp <- .C("formatg", as.integer(n),
-	                  as.double(x),
+                      as.double(x),
                           rep(format,n),
                           out= rep(dummy, n), NAOK=TRUE, PACKAGE="mvpart")$out
     if (is.matrix(x)) matrix(temp, nrow=nrow(x))
@@ -138,11 +138,11 @@ mvpart <- function (form, data, minauto = TRUE, size, xv = c("1se", "min",
     }
     use.size <- FALSE
     z <- rpart(form, data = data, xval = xval, ...)
-    old.par <- par(mar = c(6, 4, 4, 4) + 0.1)
+    old.par <- par(mar = c(6, 4, 4, 4) + 0.1, xpd = NA)
     on.exit(par(old.par))
     if (!is.null(z)) {
-		        xval <- z$control$xval
-            	if (xvmult > 1) {
+                xval <- z$control$xval
+                if (xvmult > 1) {
             zresse <- zres <- matrix(NA, nrow = nrow(z$cptable), 
                 ncol = xvmult)
             zres[, 1] <- z$cptable[, 4]
@@ -266,7 +266,7 @@ mvpart <- function (form, data, minauto = TRUE, size, xv = c("1se", "min",
     }
 }
 
-# SCCS @(#)labels.rpart.s	1.5 07/17/01
+# SCCS @(#)labels.rpart.s   1.5 07/17/01
 # Make the nice labels used by print and summary
 #   digits = obvious
 #   minlength = 0 = don't abbrev factors
@@ -283,15 +283,15 @@ mvpart <- function (form, data, minauto = TRUE, size, xv = c("1se", "min",
 #   ... = other args for abbreviate()
 #
 labels.rpart <- function(object, digits=4, minlength=1, pretty,
-			      collapse=TRUE, ...) {
+                  collapse=TRUE, ...) {
     if (missing(minlength) && !missing(pretty)) {
-	if (is.null(pretty)) minlength <-1
-	else if (is.logical(pretty)) {
-	    if (pretty) minlength <- 4
-	    else        minlength <- 0
-	    }
-	else minlength <- 0
-	}
+    if (is.null(pretty)) minlength <-1
+    else if (is.logical(pretty)) {
+        if (pretty) minlength <- 4
+        else        minlength <- 0
+        }
+    else minlength <- 0
+    }
 
     ff <- object$frame
     n  <- nrow(ff)
@@ -311,65 +311,65 @@ labels.rpart <- function(object, digits=4, minlength=1, pretty,
     lsplit <- rsplit <- vector(mode='character', length= length(irow))
 
     if (any(ncat <2)) {  # any continuous vars ?
-	jrow <- irow[ncat <2]
-	cutpoint <- formatg(object$splits[jrow,4], digits)
-	temp1 <- (ifelse(ncat<0, "< ", ">="))[ncat <2]
-	temp2 <- (ifelse(ncat<0, ">=", "< "))[ncat <2]
-	lsplit[ncat<2] <- paste(temp1, cutpoint, sep='')
-	rsplit[ncat<2] <- paste(temp2, cutpoint, sep='')
-	}
+    jrow <- irow[ncat <2]
+    cutpoint <- formatg(object$splits[jrow,4], digits)
+    temp1 <- (ifelse(ncat<0, "< ", ">="))[ncat <2]
+    temp2 <- (ifelse(ncat<0, ">=", "< "))[ncat <2]
+    lsplit[ncat<2] <- paste(temp1, cutpoint, sep='')
+    rsplit[ncat<2] <- paste(temp2, cutpoint, sep='')
+    }
 
     if (any(ncat >1)) { # any categorical variables ?
-	xlevels <- attr(object, 'xlevels')
-	#
-	# jrow will be the row numbers of factors within lsplit and rsplit
-	# crow the row number in "csplit"
-	# and cindex the index on the "xlevels" list
-	#
-	jrow <- (seq(along=ncat))[ncat>1]
-	crow <- object$splits[irow[ncat>1],4]    #row number in csplit
-	cindex <- (match(vnames, names(xlevels)))[ncat >1]
+    xlevels <- attr(object, 'xlevels')
+    #
+    # jrow will be the row numbers of factors within lsplit and rsplit
+    # crow the row number in "csplit"
+    # and cindex the index on the "xlevels" list
+    #
+    jrow <- (seq(along=ncat))[ncat>1]
+    crow <- object$splits[irow[ncat>1],4]    #row number in csplit
+    cindex <- (match(vnames, names(xlevels)))[ncat >1]
 
-	# Now, abbreviate the levels
-	if (minlength ==1) {
-	    if (any(ncat>52))
-		warning(paste("More than 52 levels in a predicting factor,",
-			      "truncated for printout"))
-	    xlevels <- lapply(xlevels,
-			       function(z) {
-				   k <- length(z)
-				   k <- pmin(1:k, 52)
-				   c(letters, LETTERS)[k]
-				   })
-	    }
-	else if (minlength >1)
-	    xlevels <- lapply(xlevels, abbreviate, minlength, ...)
+    # Now, abbreviate the levels
+    if (minlength ==1) {
+        if (any(ncat>52))
+        warning(paste("More than 52 levels in a predicting factor,",
+                  "truncated for printout"))
+        xlevels <- lapply(xlevels,
+                   function(z) {
+                   k <- length(z)
+                   k <- pmin(1:k, 52)
+                   c(letters, LETTERS)[k]
+                   })
+        }
+    else if (minlength >1)
+        xlevels <- lapply(xlevels, abbreviate, minlength, ...)
 
-	# Now tuck in the labels
-	# I'll let some other clever person vectorize this
-	for (i in 1:(length(jrow))) {
-	    j <- jrow[i]
-	    splits <- object$csplit[crow[i],]
-	    # splits will contain 1=left, 2=right, 3= neither
-	    ltemp <- (1:length(splits))[splits== 1]
-	    rtemp <- (1:length(splits))[splits== 3]
-	    if (minlength==1) {
-		lsplit[j] <- paste((xlevels[[cindex[i]]])[ltemp], collapse='')
-		rsplit[j] <- paste((xlevels[[cindex[i]]])[rtemp], collapse='')
-		}
-	    else {
-		lsplit[j] <-paste((xlevels[[cindex[i]]])[ltemp], collapse=',')
-		rsplit[j] <-paste((xlevels[[cindex[i]]])[rtemp], collapse=',')
-		}
-	    }
-	}
+    # Now tuck in the labels
+    # I'll let some other clever person vectorize this
+    for (i in 1:(length(jrow))) {
+        j <- jrow[i]
+        splits <- object$csplit[crow[i],]
+        # splits will contain 1=left, 2=right, 3= neither
+        ltemp <- (1:length(splits))[splits== 1]
+        rtemp <- (1:length(splits))[splits== 3]
+        if (minlength==1) {
+        lsplit[j] <- paste((xlevels[[cindex[i]]])[ltemp], collapse='')
+        rsplit[j] <- paste((xlevels[[cindex[i]]])[rtemp], collapse='')
+        }
+        else {
+        lsplit[j] <-paste((xlevels[[cindex[i]]])[ltemp], collapse=',')
+        rsplit[j] <-paste((xlevels[[cindex[i]]])[rtemp], collapse=',')
+        }
+        }
+    }
 
     if (!collapse) {  #called by no routines that I know of
-	ltemp <- rtemp <- rep("<leaf>", n)
-	ltemp[whichrow] <- lsplit
-	rtemp[whichrow] <- rsplit
-	return(cbind(ltemp, rtemp))
-	}
+    ltemp <- rtemp <- rep("<leaf>", n)
+    ltemp[whichrow] <- lsplit
+    rtemp[whichrow] <- rsplit
+    return(cbind(ltemp, rtemp))
+    }
 
     lsplit <- paste(ifelse(ncat<2, "", "="), lsplit, sep='')
     rsplit <- paste(ifelse(ncat<2, "", "="), rsplit, sep='')
@@ -390,72 +390,72 @@ labels.rpart <- function(object, digits=4, minlength=1, pretty,
     labels[1] <- "root"
     labels
     }
-# SCCS 02/18/97 @(#)meanvar.rpart.s	1.2
+# SCCS 02/18/97 @(#)meanvar.rpart.s 1.2
 
 meanvar.rpart <- function(tree, xlab = "ave(y)", ylab = "ave(deviance)", ...)
 
 {
-	if(!inherits(tree, "rpart"))
-		stop("Not legitimate rpart object")
-	if(!tree$method=='anova')
-		stop("Plot not useful for classification or poisson trees")
-	frame <- tree$frame
-	frame <- frame[frame$var == "<leaf>",  ]
-	x <- frame$yval
-	y <- frame$dev/frame$n
-	label <- row.names(frame)
-	plot(x, y, xlab = xlab, ylab = ylab, type = "n", ...)
-	text(x, y, label)
-	invisible(list(x = x, y = y, label = label))
+    if(!inherits(tree, "rpart"))
+        stop("Not legitimate rpart object")
+    if(!tree$method=='anova')
+        stop("Plot not useful for classification or poisson trees")
+    frame <- tree$frame
+    frame <- frame[frame$var == "<leaf>",  ]
+    x <- frame$yval
+    y <- frame$dev/frame$n
+    label <- row.names(frame)
+    plot(x, y, xlab = xlab, ylab = ylab, type = "n", ...)
+    text(x, y, label)
+    invisible(list(x = x, y = y, label = label))
 }
 
 meanvar <- function(tree,...) UseMethod('meanvar')
-# sccs @(#)model.frame.rpart.s	1.3 01/21/97
+# sccs @(#)model.frame.rpart.s  1.3 01/21/97
 model.frame.rpart <- function(formula, ...)
 {
-	m <- formula$model
-	if(!is.null(m))
-		return(m)
-	oc <- formula$call
-	if(substring(deparse(oc[[1]]), 1, 7) == "predict") {
-		m <- eval(oc$newdata)
-		if(is.null(attr(m, "terms"))) {
-			object <- eval(oc$object)
-			m <- model.frame(object$terms, m, na.rpart)
-		}
-		return(m)
-	}
-	while(deparse(oc[[1]]) != "rpart") oc <- eval(oc[[2]])$call
-	oc$subset <- names(formula$where)
-	oc$method <- formula$method
-	eval(oc)
+    m <- formula$model
+    if(!is.null(m))
+        return(m)
+    oc <- formula$call
+    if(substring(deparse(oc[[1]]), 1, 7) == "predict") {
+        m <- eval(oc$newdata)
+        if(is.null(attr(m, "terms"))) {
+            object <- eval(oc$object)
+            m <- model.frame(object$terms, m, na.rpart)
+        }
+        return(m)
+    }
+    while(deparse(oc[[1]]) != "rpart") oc <- eval(oc[[2]])$call
+    oc$subset <- names(formula$where)
+    oc$method <- formula$method
+    eval(oc)
 }
 
-#SCCS  @(#)na.rpart.s	1.5 12/13/99
+#SCCS  @(#)na.rpart.s   1.5 12/13/99
 na.rpart <- function(x){
     Terms <- attr(x, 'terms')
     if(!is.null(Terms)) yvar <- attr(Terms, "response") else yvar <- 0
     if (yvar==0) {
-	xmiss <- is.na(x)
-	keep <-  (xmiss %*% rep(1,ncol(xmiss))) < ncol(xmiss)
-	}
+    xmiss <- is.na(x)
+    keep <-  (xmiss %*% rep(1,ncol(xmiss))) < ncol(xmiss)
+    }
     else {
-	xmiss <- is.na(x[-yvar])
-	ymiss <- is.na(x[[yvar]])
-	if (is.matrix(ymiss))
-	    keep <- ((xmiss %*% rep(1,ncol(xmiss))) < ncol(xmiss)) &
-		    ((ymiss %*% rep(1,ncol(ymiss))) == 0 )
-	else
-	    keep <- ((xmiss %*% rep(1,ncol(xmiss))) < ncol(xmiss)) & !ymiss
-	}
+    xmiss <- is.na(x[-yvar])
+    ymiss <- is.na(x[[yvar]])
+    if (is.matrix(ymiss))
+        keep <- ((xmiss %*% rep(1,ncol(xmiss))) < ncol(xmiss)) &
+            ((ymiss %*% rep(1,ncol(ymiss))) == 0 )
+    else
+        keep <- ((xmiss %*% rep(1,ncol(xmiss))) < ncol(xmiss)) & !ymiss
+    }
     if (all(keep)) x
     else {
-	temp <- seq(keep)[!keep]
-	names(temp) <- row.names(x)[!keep]
-	#the methods for this group are all the same as for na.omit
-	class(temp) <- c("na.rpart", "omit")
-	structure(x[keep,], na.action=temp)
-	}
+    temp <- seq(keep)[!keep]
+    names(temp) <- row.names(x)[!keep]
+    #the methods for this group are all the same as for na.omit
+    class(temp) <- c("na.rpart", "omit")
+    structure(x[keep,], na.action=temp)
+    }
     }
 ## submitted by Anantha Prasad 1/26/98
 
@@ -485,7 +485,7 @@ path.rpart <- function(tree, nodes, pretty = 0, print.it = TRUE)
                         return(invisible())
                 for(i in nodes)
                        { path[[n[i]]] <- path.i <- splits[which[, i]]
-			if(print.it) {
+            if(print.it) {
                                 cat("\n", "node number:", n[i], "\n")
                                 cat(paste("  ", path.i), sep = "\n")
                                 }
@@ -498,10 +498,10 @@ path.rpart <- function(tree, nodes, pretty = 0, print.it = TRUE)
 
 
 
-#SCCS @(#)plot.rpart.s	1.8 06/08/01
+#SCCS @(#)plot.rpart.s  1.8 06/08/01
 
 plot.rpart <- function (x, uniform = FALSE, branch = 1, compress = FALSE, nspace, 
-    margin = 0.0, minbranch = 0.3, bar = 0.03, ms.fudge = TRUE,...) 
+    margin = 0.0, minbranch = 0.3, bar = 0.03, ms.fudge = FALSE,...) 
 {
     if (!inherits(x, "rpart")) 
         stop("Not an rpart object")
@@ -538,7 +538,7 @@ plot.rpart <- function (x, uniform = FALSE, branch = 1, compress = FALSE, nspace
 }
 
 
-# SCCS @(#)plotcp.s	1.1 02/08/98
+# SCCS @(#)plotcp.s 1.1 02/08/98
 # Contributed by B.D. Ripley 97/07/17
 #
 
@@ -554,7 +554,7 @@ plotcp <- function (x, xvse = 1, minline = TRUE , lty = 3, col = 1, upper = c("s
     xstd <- p.rpart[, 5]
     xerror <- p.rpart[, 4]
     }
-	error <- p.rpart[, 3]
+    error <- p.rpart[, 3]
     nsplit <- p.rpart[, 2]
     ns <- seq(along = nsplit)
     cp0 <- p.rpart[, 1]
@@ -579,7 +579,7 @@ plotcp <- function (x, xvse = 1, minline = TRUE , lty = 3, col = 1, upper = c("s
     points(ns, xerror, type = "b", col = "blue", ...)
     segments(ns, xerror - xstd, ns, xerror + xstd, col = "blue", 
         ...)
-	}
+    }
     if (resub.err) 
         points(ns, error, type = "b", lty = 1, col = "darkgreen", 
             ...)
@@ -600,7 +600,7 @@ plotcp <- function (x, xvse = 1, minline = TRUE , lty = 3, col = 1, upper = c("s
         axis(3, at = ns, lab = as.character(nsplit), ...)
         mtext("Number of splits", side = 3, line = 3, ...)
     }, )
- 	if (xv) {
+    if (xv) {
     minpos <- min(seq(along = xerror)[xerror == min(xerror)])
     if (minline) {
         abline(h = (xerror + xvse * xstd)[minpos], lty = 1, col = col, 
@@ -613,22 +613,22 @@ plotcp <- function (x, xvse = 1, minline = TRUE , lty = 3, col = 1, upper = c("s
 }
 
 
-# SCCS 05/11/01 @(#)post.rpart.s	1.13
+# SCCS 05/11/01 @(#)post.rpart.s    1.13
 #
 post.rpart <- function(tree, title.,
-		       filename=paste(deparse(substitute(tree)),".ps",sep=""),
-		       digits=getOption("digits") - 3, pretty=TRUE,
-		       use.n=TRUE,  horizontal=TRUE, ...)
+               filename=paste(deparse(substitute(tree)),".ps",sep=""),
+               digits=getOption("digits") - 3, pretty=TRUE,
+               use.n=TRUE,  horizontal=TRUE, ...)
 {
     if(filename !=""){
-	postscript(file = filename, horizontal=horizontal, ...)
-	par(mar=c(2,2,4,2)+.1)
-	on.exit(dev.off())
-	}
+    postscript(file = filename, horizontal=horizontal, ...)
+    par(mar=c(2,2,4,2)+.1)
+    on.exit(dev.off())
+    }
     else {
-	oldpar <- par(mar=c(2,2,4,2)+.1)
-	on.exit(invisible(par(oldpar)))
-	}
+    oldpar <- par(mar=c(2,2,4,2)+.1)
+    on.exit(invisible(par(oldpar)))
+    }
 
     plot(tree, uniform=TRUE, branch=.2, compress=TRUE, margin=.1)
     text(tree, all=TRUE, use.n=use.n, digits=digits, pretty=pretty)
@@ -640,10 +640,10 @@ post.rpart <- function(tree, title.,
     } else if (title. !="") title(title.,cex=.8)
 }
 
-## SCCS @(#)post.s	1.3 02/27/98
+## SCCS @(#)post.s  1.3 02/27/98
 post <- function(tree, ...) UseMethod("post")
 
-# SCCS @(#)pred.rpart.s	1.3 09/03/97
+# SCCS @(#)pred.rpart.s 1.3 09/03/97
 #
 # Do Rpart predictions given a tree and a matrix of predictors
 pred.rpart <- function(fit, x) {
@@ -681,25 +681,25 @@ pred.rpart <- function(fit, x) {
     names(temp) <- rownames(x)
     temp
 }
-## SCCS @(#)predict.rpart.s	1.11 06/03/01
+## SCCS @(#)predict.rpart.s 1.11 06/03/01
 predict.rpart <-
 function(object, newdata = list(),
-	 type = c("vector", "prob", "class", "matrix"), ...) {
+     type = c("vector", "prob", "class", "matrix"), ...) {
     if(!inherits(object, "rpart"))
-	stop("Not legitimate tree")
+    stop("Not legitimate tree")
     mtype <- missing(type)
     type <- match.arg(type)
     if(missing(newdata))
-	where <- object$where
+    where <- object$where
     else {
-	if(is.null(attr(newdata, "terms"))) {
-	    Terms <- delete.response(object$terms)
-	    act <- (object$call)$na.action
-	    if (is.null(act)) act<- na.rpart
-	    newdata <- model.frame(Terms, newdata, na.action = act,
+    if(is.null(attr(newdata, "terms"))) {
+        Terms <- delete.response(object$terms)
+        act <- (object$call)$na.action
+        if (is.null(act)) act<- na.rpart
+        newdata <- model.frame(Terms, newdata, na.action = act,
                                       xlev=attr(object, "xlevels"))
         }
-	where <- pred.rpart(object, rpart.matrix(newdata))
+    where <- pred.rpart(object, rpart.matrix(newdata))
     }
     frame <- object$frame
     method <- object$method
@@ -708,20 +708,20 @@ function(object, newdata = list(),
     if(mtype && nclass > 0) type <- "prob"
     if(mtype && method=="mrt") type <- "matrix"
     if(type == "vector" || (type=="matrix" && is.null(frame$yval2))) {
-	pred <- frame$yval[where]
-	names(pred) <- names(where)
+    pred <- frame$yval[where]
+    names(pred) <- names(where)
     }
     else if (type == "matrix") {
-	pred <- frame$yval2[where,]
-	dimnames(pred) <- list(names(where), NULL)
+    pred <- frame$yval2[where,]
+    dimnames(pred) <- list(names(where), NULL)
     }
     else if(type == "class" && nclass > 0) {
-	pred <- factor(ylevels[frame$yval[where]], levels=ylevels)
-	names(pred) <- names(where)
+    pred <- factor(ylevels[frame$yval[where]], levels=ylevels)
+    names(pred) <- names(where)
     }
     else if (type == "prob" && nclass > 0) {
-	pred <- frame$yval2[where, 1 + nclass + 1:nclass]
-	dimnames(pred) <- list(names(where), ylevels)
+    pred <- frame$yval2[where, 1 + nclass + 1:nclass]
+    dimnames(pred) <- list(names(where), ylevels)
     }
     else stop("Invalid prediction for rpart object")
 
@@ -732,7 +732,7 @@ function(object, newdata = list(),
     pred
 }
 
-#SCCS  @(#)print.rpart.s	1.15 06/06/01
+#SCCS  @(#)print.rpart.s    1.15 06/06/01
 print.rpart <- function(x, minlength=0, spaces=2, cp,
                digits=getOption("digits"), ...) {
     if(!inherits(x, "rpart")) stop("Not legitimate rpart object")
@@ -753,10 +753,10 @@ print.rpart <- function(x, minlength=0, spaces=2, cp,
 
     tfun <- (x$functions)$print
     if (!is.null(tfun)) {
-	if (is.null(frame$yval2))
-		yval <- tfun(frame$yval,  ylevel, digits)
-	else    yval <- tfun(frame$yval2,  ylevel, digits)
-	}
+    if (is.null(frame$yval2))
+        yval <- tfun(frame$yval,  ylevel, digits)
+    else    yval <- tfun(frame$yval2,  ylevel, digits)
+    }
     else yval <- format(signif(frame$yval, digits = digits))
     term <- rep(" ", length(depth))
     term[frame$var == "<leaf>"] <- "*"
@@ -780,20 +780,20 @@ print.rpart <- function(x, minlength=0, spaces=2, cp,
     return(invisible(x))
     #end of the theft
     }
-#SCCS  @(#)printcp.s	1.6 01/20/00
+#SCCS  @(#)printcp.s    1.6 01/20/00
 # print out the cptable, along with some summary of the tree
 printcp <- function(x, digits=getOption("digits")-2)
 {
     if (!inherits(x, 'rpart')) stop ("Must be an rpart x")
     cat(switch(x$method,anova = "\nRegression tree:\n" ,
-			class = "\nClassification tree:\n" ,
-			poisson="\nRates regression tree:\n",
-			exp = "\nSurvival regression tree:\n")
+            class = "\nClassification tree:\n" ,
+            poisson="\nRates regression tree:\n",
+            exp = "\nSurvival regression tree:\n")
         )
 
     if(!is.null(cl <- x$call)) {
-	dput(cl)
-	cat("\n")
+    dput(cl)
+    cat("\n")
     }
     frame <- x$frame
     leaves <- frame$var == "<leaf>"
@@ -823,7 +823,7 @@ printcp <- function(x, digits=getOption("digits")-2)
 }
 
 
-#SCCS @(#)prune.rpart.s	1.9 10/30/01
+#SCCS @(#)prune.rpart.s 1.9 10/30/01
 prune.rpart <- function(tree, cp, ...)
 {
     ff <- tree$frame
@@ -841,14 +841,14 @@ prune.rpart <- function(tree, cp, ...)
 
     newx
 }
-# SCCS @(#)prune.s	1.2 02/12/98
+# SCCS @(#)prune.s  1.2 02/12/98
 # This should be part of Splus proper -- make prune a method
 prune <- function(tree, ...)  UseMethod("prune")
 #SCCS  %W% %G%
 residuals.rpart <- function(object, type = c("usual", "pearson", "deviance"), ...)
     {
     if(!inherits(object, "rpart"))
-	    stop("Not legitimate rpart object")
+        stop("Not legitimate rpart object")
 
     y <- object$y
     if (is.null(y)) y <- model.extract(model.frame(object), "response")
@@ -858,17 +858,17 @@ residuals.rpart <- function(object, type = c("usual", "pearson", "deviance"), ..
                 stop("Don't know about this type of residual")
 
     if (object$method=='class') {
-	ylevels <- attr(object, "ylevels")
-	nclass <- length(ylevels)
+    ylevels <- attr(object, "ylevels")
+    nclass <- length(ylevels)
 
         if(type == "usual") {
                 yhat <- frame$yval[object$where]
-		loss <- object$parms$loss
-		}
+        loss <- object$parms$loss
+        }
         else {
-	    yprob <- frame$yval2[object$where, 1 + nclass + 1:nclass]
-	    yhat <- yprob[cbind(seq(y), unclass(y))]
-	    }
+        yprob <- frame$yval2[object$where, 1 + nclass + 1:nclass]
+        yhat <- yprob[cbind(seq(y), unclass(y))]
+        }
         resid  <- switch(type,
                 usual = loss[cbind(y, yhat)],
                 pearson = (1 - yhat)/yhat,
@@ -876,19 +876,19 @@ residuals.rpart <- function(object, type = c("usual", "pearson", "deviance"), ..
        }
 
     else if (object$method=='poisson' || object$method=='exp') {
-	lambda <- (object$frame$yval)[object$where]
-	time   <- y[,1]  # observation time in new data
-	events <- y[,2]  # number of events, in new data
-	expect <- lambda * time #expected number of events
-	temp <- ifelse(expect==0, .0001, 0)  #failsafe for log(0)
+    lambda <- (object$frame$yval)[object$where]
+    time   <- y[,1]  # observation time in new data
+    events <- y[,2]  # number of events, in new data
+    expect <- lambda * time #expected number of events
+    temp <- ifelse(expect==0, .0001, 0)  #failsafe for log(0)
 
-	resid <- switch(type,
-			usual = events - expect,
-			pearson = (events - expect)/sqrt(temp),
-			deviance= sign(events- expect) *
-			   sqrt(2*(events*log(events/temp) - (events-expect)))
-			)
-	}
+    resid <- switch(type,
+            usual = events - expect,
+            pearson = (events - expect)/sqrt(temp),
+            deviance= sign(events- expect) *
+               sqrt(2*(events*log(events/temp) - (events-expect)))
+            )
+    }
 
     else  resid <- y - frame$yval[object$where]
 
@@ -896,38 +896,38 @@ residuals.rpart <- function(object, type = c("usual", "pearson", "deviance"), ..
     names(resid) <- names(y)
     #Expand out the missing values in the result
     if (!is.null(object$na.action))
-	resid <- naresid(object$na.action, resid)
+    resid <- naresid(object$na.action, resid)
 
     resid
     }
-#SCCS @(#)rpart.anova.s	1.4 05/02/01
+#SCCS @(#)rpart.anova.s 1.4 05/02/01
 rpart.anova <- function(y, offset, parms, wt) {
     if (!is.null(offset)) y <- y-offset
     list(y=y, parms=0, numresp=1, numy=1,
-	 summary= function(yval, dev, wt, ylevel, digits ) {
-	     paste("  mean=", formatg(yval, digits),
-		   ", MSE=" , formatg(dev/wt, digits),
-		   sep='')
-	     },
-	 text= function(yval, dev, wt, ylevel, digits, n, use.n ) {
-	     if(use.n) {paste(formatg(yval,digits),"\nn=", n,sep="")} else
-	               {paste(formatg(yval,digits))}}
+     summary= function(yval, dev, wt, ylevel, digits ) {
+         paste("  mean=", formatg(yval, digits),
+           ", MSE=" , formatg(dev/wt, digits),
+           sep='')
+         },
+     text= function(yval, dev, wt, ylevel, digits, n, use.n ) {
+         if(use.n) {paste(formatg(yval,digits),"\nn=", n,sep="")} else
+                   {paste(formatg(yval,digits))}}
 
-	 )
+     )
     }
-#SCCS @(#)rpart.branch.s	1.2 01/25/97
+#SCCS @(#)rpart.branch.s    1.2 01/25/97
 #
 # Compute the "branches" to be drawn for an rpart object
 #
 rpart.branch <- function(x, y, node, branch) {
     if (missing(branch)) {
-	if (exists(parms <-paste(".rpart.parms", dev.cur(), sep="." ),
+    if (exists(parms <-paste(".rpart.parms", dev.cur(), sep="." ),
                    envir=.GlobalEnv)) {
-#	    parms <- get(parms, frame=0)
+#       parms <- get(parms, frame=0)
             parms <- get(parms, envir=.GlobalEnv)
             branch <- parms$branch
-	    }
-	else branch <- 0
+        }
+    else branch <- 0
         }
 
     # Draw a series of horseshoes, left son, up, over, down to right son
@@ -942,7 +942,7 @@ rpart.branch <- function(x, y, node, branch) {
     yy <- rbind(y[is.left], y[parent], y[parent], y[sibling], NA)
     list(x=xx, y=yy)
     }
-#SCCS @(#)rpart.class.s	1.7 07/05/01
+#SCCS @(#)rpart.class.s 1.7 07/05/01
 
 rpart.class <- function (y, offset, parms, wt) 
 {
@@ -1062,7 +1062,7 @@ rpart.class <- function (y, offset, parms, wt)
 }
 
 
-#SCCS @(#)rpart.control.s	1.10 07/05/01
+#SCCS @(#)rpart.control.s   1.10 07/05/01
 
 rpart.control <- function (minsplit = 5, minbucket = round(minsplit/3), cp = 0.01, 
     maxcompete = 4, maxsurrogate = 5, usesurrogate = 2, xval = 10, 
@@ -1099,7 +1099,7 @@ rpart.control <- function (minsplit = 5, minbucket = round(minsplit/3), cp = 0.0
 }
 
 
-#SCCS @(#)rpart.exp.s	1.8 07/05/01
+#SCCS @(#)rpart.exp.s   1.8 07/05/01
 # rescaled exponential splitting
 #  The survival object 'y' is rescaled so that
 #    a. overall death rate is 1.0
@@ -1114,7 +1114,7 @@ rpart.control <- function (minsplit = 5, minbucket = round(minsplit/3), cp = 0.0
 rpart.exp <- function(y, offset, parms, wt) {
 
     if (!inherits(y, "Surv"))
-	   stop("Response must be a survival object - use the Surv() function")
+       stop("Response must be a survival object - use the Surv() function")
 
     ny <- ncol(y)
     n  <- nrow(y)
@@ -1133,10 +1133,10 @@ rpart.exp <- function(y, offset, parms, wt) {
     #   intervals.  This turns out to be hard to do in S, but easy in C
     dtimes <- sort(unique(time[status==1]))        # unique death times
     temp <- .C('rpartexp2',
-	       as.integer(length(dtimes)),
-	       as.double(dtimes),
-	       as.double(.Machine$double.eps),
-	       keep=integer(length(dtimes)), PACKAGE="mvpart")$keep
+           as.integer(length(dtimes)),
+           as.double(dtimes),
+           as.double(.Machine$double.eps),
+           keep=integer(length(dtimes)), PACKAGE="mvpart")$keep
     dtimes <- dtimes[temp==1]
 
     # For the sake of speed, restrict the number of intervals to be <1000.
@@ -1148,79 +1148,79 @@ rpart.exp <- function(y, offset, parms, wt) {
     itable <- c(0, dtimes[-length(dtimes)], max(time)) # set of intervals
 
     drate1 <- function(n, ny, y, wt, itable) {
-	# Compute the death rate within each of the intervals
-	#  The pyears2 routine is part of the survival library
-	ngrp <- length(itable) -1
-	temp <- .C('pyears2',
-		   as.integer(n),
-		   as.integer(ny),
-		   as.integer(1),
-		   as.double (y),
-		   as.double(wt),
-		   as.integer(1),
-		   as.integer(0),
-		   as.integer(ngrp),
-		   as.double(itable),
-		   as.double(rep(0., n)),
-		   pyears = double(ngrp),
-		   pn     = double(ngrp),
-		   pcount = double(ngrp),
-		   offtable= double(1), PACKAGE="survival")[11:14]
-	rates <- temp$pcount / temp$pyears
-	rates
-	}
+    # Compute the death rate within each of the intervals
+    #  The pyears2 routine is part of the survival library
+    ngrp <- length(itable) -1
+    temp <- .C('pyears2',
+           as.integer(n),
+           as.integer(ny),
+           as.integer(1),
+           as.double (y),
+           as.double(wt),
+           as.integer(1),
+           as.integer(0),
+           as.integer(ngrp),
+           as.double(itable),
+           as.double(rep(0., n)),
+           pyears = double(ngrp),
+           pn     = double(ngrp),
+           pcount = double(ngrp),
+           offtable= double(1), PACKAGE="survival")[11:14]
+    rates <- temp$pcount / temp$pyears
+    rates
+    }
 
     drate2 <- function(n, ny, y, wt, itable) {
-	# An alternative to the drate1 function
-	# Why?  The pyears2 routine changed in 6/2001, with the inclusion
-	#  of case weights.  We need the newer version.  If you have the
-	#  older version of the survival library, the above will crash S.
-	# How to tell -- list the pyears function, and see whether it's
-	#  call to pyears2 has weights in the argument list.
-	#
-	time <- y[, ny-1]
-	status <- y[,ny]
-	ilength <- diff(itable)                   #lengths of intervals
-	ngrp <- length(ilength)                   #number of intervals
+    # An alternative to the drate1 function
+    # Why?  The pyears2 routine changed in 6/2001, with the inclusion
+    #  of case weights.  We need the newer version.  If you have the
+    #  older version of the survival library, the above will crash S.
+    # How to tell -- list the pyears function, and see whether it's
+    #  call to pyears2 has weights in the argument list.
+    #
+    time <- y[, ny-1]
+    status <- y[,ny]
+    ilength <- diff(itable)                   #lengths of intervals
+    ngrp <- length(ilength)                   #number of intervals
 
-	# The code below is as opaque as any I've written, all in the
-	#  service of "no for loops".
-	# First, 'index' gives the time interval (as defined by itable)
-	#  in which the end of each observation's follow-up (time) lies.
-	#  Then 'itime' will be the amount of time spent in that last
-	#  interval, which is of course somewhat less than ilength.
-	index <- unclass(cut(time, itable, include.lowest=TRUE))
-	itime <- time - itable[index]
-	if (ny ==3) {
-	    # there is both a start time and a stop time
-	    #  compute the amount of time NOT spent in the interval that
-	    #  the start time lies in.
-	    stime <- y[,1]   #start time for each interval
-	    index2<- unclass(cut(stime, itable, include.lowest=TRUE))
-	    itime2<- stime - itable[index2]
-	    }
+    # The code below is as opaque as any I've written, all in the
+    #  service of "no for loops".
+    # First, 'index' gives the time interval (as defined by itable)
+    #  in which the end of each observation's follow-up (time) lies.
+    #  Then 'itime' will be the amount of time spent in that last
+    #  interval, which is of course somewhat less than ilength.
+    index <- unclass(cut(time, itable, include.lowest=TRUE))
+    itime <- time - itable[index]
+    if (ny ==3) {
+        # there is both a start time and a stop time
+        #  compute the amount of time NOT spent in the interval that
+        #  the start time lies in.
+        stime <- y[,1]   #start time for each interval
+        index2<- unclass(cut(stime, itable, include.lowest=TRUE))
+        itime2<- stime - itable[index2]
+        }
 
-	# Compute the amount of person-years in each of the intervals
-	#   This is:  (width of interval) * (number of "time" elements that
-	#                                     end in an interval farther right)
-	#            + (ending times in this interval)
-	# By construction, I know that there is at least 1 obs in each of the
-	#  intervals, so tab1 is of a determined length
-	tab1 <- table(index)
-	temp <- rev(cumsum(rev(tab1)))  #cumsum, counting from the right
-	pyears <- ilength * c(temp[-1], 0) +	 tapply(itime, index, sum)
-	if (ny==3) {
-	    #subtract off the time before "start"
-	    tab2 <- table(index2, levels=1:ngrp) #force the length of tab2
-	    temp <- rev(cumsum(rev(tab2)))
-	    py2  <-  ilength * c(0, temp[-ngrp]) +  tapply(itime2, index2, sum)
-	    pyears <- pyears - py2
-	    }
+    # Compute the amount of person-years in each of the intervals
+    #   This is:  (width of interval) * (number of "time" elements that
+    #                                     end in an interval farther right)
+    #            + (ending times in this interval)
+    # By construction, I know that there is at least 1 obs in each of the
+    #  intervals, so tab1 is of a determined length
+    tab1 <- table(index)
+    temp <- rev(cumsum(rev(tab1)))  #cumsum, counting from the right
+    pyears <- ilength * c(temp[-1], 0) +     tapply(itime, index, sum)
+    if (ny==3) {
+        #subtract off the time before "start"
+        tab2 <- table(index2, levels=1:ngrp) #force the length of tab2
+        temp <- rev(cumsum(rev(tab2)))
+        py2  <-  ilength * c(0, temp[-ngrp]) +  tapply(itime2, index2, sum)
+        pyears <- pyears - py2
+        }
 
-	deaths <- tapply(status, index, sum)
-	rate <- deaths/pyears   #hazard rate in each interval
-	rate
-	}
+    deaths <- tapply(status, index, sum)
+    rate <- deaths/pyears   #hazard rate in each interval
+    rate
+    }
 
     #
     # Now, compute the "new y" for each observation.
@@ -1231,46 +1231,46 @@ rpart.exp <- function(y, offset, parms, wt) {
     cumhaz <- cumsum(c(0, rate*diff(itable)))
     newy <- approx(itable, cumhaz, time)$y
     if (ny==3) {
-	newy <- newy - approx(itable, cumhaz, stime)$y
-	}
+    newy <- newy - approx(itable, cumhaz, stime)$y
+    }
 
     if (length(offset)==n)  newy <- newy * exp(offset)
 
     if (missing(parms)) parms <- c(shrink=1, method=1)
     else {
-	parms <- as.list(parms)
+    parms <- as.list(parms)
         if(is.null(names(parms))) stop("You must input a named list for parms")
         parmsNames <- c("method", "shrink")
         indx <- pmatch(names(parms), parmsNames, nomatch= 0)
         if (any(indx==0))
             stop(paste("parms component not matched: ",
-		       names(parms)[indx==0]))
-	else names(parms) <- parmsNames[indx]
+               names(parms)[indx==0]))
+    else names(parms) <- parmsNames[indx]
 
-	if (is.null(parms$method)) method <- 1
-	else method <- pmatch(parms$method, c("deviance", "sqrt"))
-	if (is.na(method)) stop("Invalid error method for Poisson")
+    if (is.null(parms$method)) method <- 1
+    else method <- pmatch(parms$method, c("deviance", "sqrt"))
+    if (is.na(method)) stop("Invalid error method for Poisson")
 
-	if (is.null(parms$shrink)) shrink <- 2-method
-	else shrink <- parms$shrink
-	if (!is.numeric(shrink) || shrink < 0)
-		stop("Invalid shrinkage value")
-	parms <- c(shrink=shrink, method=method)
-	}
-    list(y=cbind(newy, y[,2]), parms=parms, numresp=2, numy=2,
-	 summary= function(yval, dev, wt, ylevel, digits) {
-	     paste("  events=", formatg(yval[,2]),
-		",  estimated rate=" , formatg(yval[,1], digits),
-		" , mean deviance=",formatg(dev/wt, digits),
-		sep = "")
-	     },
-	 text= function(yval, dev, wt, ylevel, digits, n, use.n) {
-	     if(use.n) {paste(formatg(yval[,1],digits),"\n",
-				formatg(yval[,2]),"/",n,sep="")} else
-		    {paste(formatg(yval[,1],digits))}
-	     })
+    if (is.null(parms$shrink)) shrink <- 2-method
+    else shrink <- parms$shrink
+    if (!is.numeric(shrink) || shrink < 0)
+        stop("Invalid shrinkage value")
+    parms <- c(shrink=shrink, method=method)
     }
-#SCCS  @(#)rpart.matrix.s	1.6 04/02/01
+    list(y=cbind(newy, y[,2]), parms=parms, numresp=2, numy=2,
+     summary= function(yval, dev, wt, ylevel, digits) {
+         paste("  events=", formatg(yval[,2]),
+        ",  estimated rate=" , formatg(yval[,1], digits),
+        " , mean deviance=",formatg(dev/wt, digits),
+        sep = "")
+         },
+     text= function(yval, dev, wt, ylevel, digits, n, use.n) {
+         if(use.n) {paste(formatg(yval[,1],digits),"\n",
+                formatg(yval[,2]),"/",n,sep="")} else
+            {paste(formatg(yval[,1],digits))}
+         })
+    }
+#SCCS  @(#)rpart.matrix.s   1.6 04/02/01
 #
 # This differs from tree.matrix in xlevels -- we don't keep NULLS in
 #   the list for all of the non-categoricals
@@ -1278,57 +1278,57 @@ rpart.exp <- function(y, offset, parms, wt) {
 rpart.matrix <- function(frame)
     {
     if(!inherits(frame, "data.frame"))
-	    return(as.matrix(frame))
+        return(as.matrix(frame))
     frame$"(weights)" <- NULL
     terms <- attr(frame, "terms")
     if(is.null(terms)) predictors <- names(frame)
     else {
-	a <- attributes(terms)
-	predictors <- as.character(a$variables)[-1] # R change
-	removals <- NULL
-	if((TT <- a$response) > 0) {
-	    removals <- TT
-	    frame[[predictors[TT]]] <- NULL
-	    }
-	if(!is.null(TT <- a$offset)) {
-	    removals <- c(removals, TT)
-	    frame[[predictors[TT]]] <- NULL
-	    }
-	if(!is.null(removals)) predictors <- predictors[ - removals]
+    a <- attributes(terms)
+    predictors <- as.character(a$variables)[-1] # R change
+    removals <- NULL
+    if((TT <- a$response) > 0) {
+        removals <- TT
+        frame[[predictors[TT]]] <- NULL
+        }
+    if(!is.null(TT <- a$offset)) {
+        removals <- c(removals, TT)
+        frame[[predictors[TT]]] <- NULL
+        }
+    if(!is.null(removals)) predictors <- predictors[ - removals]
         labels <- a$term.labels
-	if(abs(length(labels)-length(predictors))>0)
-	  predictors <- predictors[match(labels,predictors)]
-	}
+    if(abs(length(labels)-length(predictors))>0)
+      predictors <- predictors[match(labels,predictors)]
+    }
 
     factors <- sapply(frame, function(x) !is.null(levels(x)))
     characters <- sapply(frame, is.character)
     if(any(factors | characters)) {
-	# change characters to factors
-	for (preds in predictors[characters])
-		frame[[preds]] <- as.factor(frame[[preds]])
+    # change characters to factors
+    for (preds in predictors[characters])
+        frame[[preds]] <- as.factor(frame[[preds]])
         factors <- factors | characters
         column.levels <- lapply(frame[factors], levels)
 
-	# Now make them numeric
-	for (preds in predictors[factors])
-	     frame[[preds]] <- as.numeric(frame[[preds]])
-	x <- as.matrix(frame)
-	attr(x, "column.levels") <- column.levels
-	}
+    # Now make them numeric
+    for (preds in predictors[factors])
+         frame[[preds]] <- as.numeric(frame[[preds]])
+    x <- as.matrix(frame)
+    attr(x, "column.levels") <- column.levels
+    }
     else x <- as.matrix(frame[predictors])
     class(x) <- "rpart.matrix"
     x
     }
 
 
-#SCCS @(#)rpart.mrt.s	1.4 05/07/03
+#SCCS @(#)rpart.mrt.s   1.4 05/07/03
 
 rpart.mrt <- function (y, offset, parms, wt) 
 {
     if (!is.null(offset)) 
         y <- y - offset
-	    ny <- ifelse(is.null(dim(y)), 1, dim(y)[2])
-    	list(y = y, parms = 0, numresp = ny, numy = ny, summary = function(yval, 
+        ny <- ifelse(is.null(dim(y)), 1, dim(y)[2])
+        list(y = y, parms = 0, numresp = ny, numy = ny, summary = function(yval, 
         dev, wt, ylevel, digits) {
         paste("  Means=", apply(formatg(yval, digits - 3), 1, 
             paste, collapse = ",", sep = ""), ", Summed MSE=", 
@@ -1347,14 +1347,14 @@ rpart.mrt <- function (y, offset, parms, wt)
 }
 
 
-#SCCS @(#)rpart.dist.s	1.4 05/07/03
+#SCCS @(#)rpart.dist.s  1.4 05/07/03
 
 rpart.dist <- function (y, offset, parms, wt) 
 {
     if (!is.null(offset)) 
         y <- y - offset
-    	ny <-  1
-    	list(y = y, parms = 0, numresp = ny, numy = ny, summary = function(yval, 
+        ny <-  1
+        list(y = y, parms = 0, numresp = ny, numy = ny, summary = function(yval, 
         dev, wt, ylevel, digits) {
         paste("  Means=", apply(formatg(yval, digits - 3), 1, 
             paste, collapse = ",", sep = ""), ", Summed MSE=", 
@@ -1374,57 +1374,57 @@ rpart.dist <- function (y, offset, parms, wt)
 
 
 
-#SCCS @(#)rpart.poisson.s	1.6 07/05/01
+#SCCS @(#)rpart.poisson.s   1.6 07/05/01
 rpart.poisson <- function(y, offset, parms, wt) {
     if (is.matrix(y)) {
-	if (ncol(y)!=2) stop("response must be a 2 column matrix or a vector")
-	if (!is.null(offset)) y[,1] <- y[,1] * exp(offset)
-	}
+    if (ncol(y)!=2) stop("response must be a 2 column matrix or a vector")
+    if (!is.null(offset)) y[,1] <- y[,1] * exp(offset)
+    }
     else {
-	if (is.null(offset)) y <- cbind(1,y)
-	else  y <- cbind( exp(offset), y)
-	}
+    if (is.null(offset)) y <- cbind(1,y)
+    else  y <- cbind( exp(offset), y)
+    }
     if (any(y[,1] <=0)) stop("Observation time must be >0")
     if (any(y[,2] <0))  stop("Number of events must be >=0")
 
     if (missing(parms)) parms <- c(shrink=1, method=1)
     else {
-	parms <- as.list(parms)
-	if(is.null(names(parms))) stop("You must input a named list for parms")
-	parmsNames <- c("method", "shrink")
-	indx <- pmatch(names(parms), parmsNames, nomatch= 0)
-	if (any(indx==0))
+    parms <- as.list(parms)
+    if(is.null(names(parms))) stop("You must input a named list for parms")
+    parmsNames <- c("method", "shrink")
+    indx <- pmatch(names(parms), parmsNames, nomatch= 0)
+    if (any(indx==0))
                stop(paste("parms component not matched: ",
-			  names(parms)[indx==0]))
-	else names(parms) <- parmsNames[indx]
+              names(parms)[indx==0]))
+    else names(parms) <- parmsNames[indx]
 
-	if (is.null(parms$method)) method <- 1
-	else method <- pmatch(parms$method, c("deviance", "sqrt"))
-	if (is.null(method)) stop("Invalid error method for Poisson")
+    if (is.null(parms$method)) method <- 1
+    else method <- pmatch(parms$method, c("deviance", "sqrt"))
+    if (is.null(method)) stop("Invalid error method for Poisson")
 
-	if (is.null(parms$shrink)) shrink <- 2- method
-	else shrink <- parms$shrink
+    if (is.null(parms$shrink)) shrink <- 2- method
+    else shrink <- parms$shrink
 
-	if (!is.numeric(shrink) || shrink <0)
-		stop("Invalid shrinkage value")
-	parms <- c(shrink=shrink, method=method)
-	}
+    if (!is.numeric(shrink) || shrink <0)
+        stop("Invalid shrinkage value")
+    parms <- c(shrink=shrink, method=method)
+    }
 
     list(y=y, parms=parms, numresp=2, numy=2,
-	 summary= function(yval, dev, wt, ylevel, digits) {
-	     paste("  events=", formatg(yval[,2]),
-		",  estimated rate=" , formatg(yval[,1], digits),
-		" , mean deviance=",formatg(dev/wt, digits),
-		sep = "")
-	     },
-	 text= function(yval, dev, wt, ylevel, digits, n, use.n) {
-	     if(use.n) {paste(formatg(yval[,1],digits),"\n",
-				formatg(yval[,2]),"/",n,sep="")} else
-		    {paste(formatg(yval[,1],digits))}}
-	 )
+     summary= function(yval, dev, wt, ylevel, digits) {
+         paste("  events=", formatg(yval[,2]),
+        ",  estimated rate=" , formatg(yval[,1], digits),
+        " , mean deviance=",formatg(dev/wt, digits),
+        sep = "")
+         },
+     text= function(yval, dev, wt, ylevel, digits, n, use.n) {
+         if(use.n) {paste(formatg(yval[,1],digits),"\n",
+                formatg(yval[,2]),"/",n,sep="")} else
+            {paste(formatg(yval[,1],digits))}}
+     )
 
     }
-# SCCS  @(#) rpart.s	1.35 07/05/01
+# SCCS  @(#) rpart.s    1.35 07/05/01
 #
 #  The recursive partitioning function, for S
 #
@@ -1519,7 +1519,7 @@ rpart <- function (formula, data = NULL, weights, subset, na.action = na.rpart,
         xgroups <- 0
 #   Set xval to 0 for dist splitting and reset controls$xval -- GD 12/03
         xval <- 0
-		controls$xval <- xval 
+        controls$xval <- xval 
            }
     else if (length(xval) == 1) {
         xgroups <- sample(rep(1:xval, length = nobs), nobs, replace = FALSE)
@@ -1809,7 +1809,7 @@ rpartcallback <- function(mlist, nobs, init)
           expr1, expr2, PACKAGE = "mvpart")
     list(expr1 = expr1, expr2 = expr2, rho = rho)
 }
-#SCCS @(#)rpartco.s	1.7 02/07/00
+#SCCS @(#)rpartco.s 1.7 02/07/00
 # Compute the x-y coordinates for a tree
 
 rpartco <- function(tree, parms =  paste(".rpart.parms", dev.cur(), sep = "."))
@@ -1821,41 +1821,41 @@ rpartco <- function(tree, parms =  paste(".rpart.parms", dev.cur(), sep = "."))
     depth <- tree.depth(node)
     is.leaf <- (frame$var == '<leaf>')
     if (exists(parms, envir=.GlobalEnv)) {
-	parms <- get(parms, envir=.GlobalEnv)
-	uniform <- parms$uniform
-	nspace <-parms$nspace
-	minbranch <- parms$minbranch
-	}
+    parms <- get(parms, envir=.GlobalEnv)
+    uniform <- parms$uniform
+    nspace <-parms$nspace
+    minbranch <- parms$minbranch
+    }
     else {
-	uniform <- FALSE
-	nspace <- -1
-	minbranch <- .3
+    uniform <- FALSE
+    nspace <- -1
+    minbranch <- .3
         }
 
     if(uniform) y <- (1 + max(depth) -depth) / max(depth,4)
     else {                    #make y- (parent y) = change in deviance
-	y <- dev <- frame$dev
+    y <- dev <- frame$dev
         temp <- split(seq(node), depth)     #depth 0 nodes, then 1, then ...
         parent <- match(floor(node/2), node)
         sibling <- match(ifelse(node %% 2, node - 1, node + 1), node)
 
-	# assign the depths
+    # assign the depths
         for(i in temp[-1]) {
-	    temp2 <- dev[parent[i]] - (dev[i] + dev[sibling[i]])
+        temp2 <- dev[parent[i]] - (dev[i] + dev[sibling[i]])
             y[i] <- y[parent[i]] - temp2
-	    }
-	#
-	# For some problems, classification & loss matrices in particular
-	#   the gain from a split may be 0.  This is ugly on the plot.
-	# Hence the "fudge" factor of  .3* the average step
-	#
-	fudge <-  minbranch * diff(range(y)) / max(depth)
+        }
+    #
+    # For some problems, classification & loss matrices in particular
+    #   the gain from a split may be 0.  This is ugly on the plot.
+    # Hence the "fudge" factor of  .3* the average step
+    #
+    fudge <-  minbranch * diff(range(y)) / max(depth)
         for(i in temp[-1]) {
-	    temp2 <- dev[parent[i]] - (dev[i] + dev[sibling[i]])
-	    haskids <- !(is.leaf[i] & is.leaf[sibling[i]])
-	    y[i] <- y[parent[i]] - ifelse(temp2<=fudge & haskids, fudge, temp2)
-	    }
-	y <- y / (max(y))
+        temp2 <- dev[parent[i]] - (dev[i] + dev[sibling[i]])
+        haskids <- !(is.leaf[i] & is.leaf[sibling[i]])
+        y[i] <- y[parent[i]] - ifelse(temp2<=fudge & haskids, fudge, temp2)
+        }
+    y <- y / (max(y))
         }
 
     # Now compute the x coordinates, by spacing out the leaves and then
@@ -1901,47 +1901,47 @@ rpartco <- function(tree, parms =  paste(".rpart.parms", dev.cur(), sep = "."))
     #
     compress <- function(me, depth) {
         lson <- me +1
-	x <- x
-	if (is.leaf[lson]) left <- list(left=x[lson], right=x[lson],
-						depth=depth+1, sons=lson)
+    x <- x
+    if (is.leaf[lson]) left <- list(left=x[lson], right=x[lson],
+                        depth=depth+1, sons=lson)
         else               left <- compress(me+1, depth+1)
 
         rson <- me + 1 + length(left$sons)        #index of right son
-	if (is.leaf[rson]) right<- list(left=x[rson], right=x[rson],
-						depth=depth+1, sons=rson)
-	else               right<- compress(rson, depth+1)
+    if (is.leaf[rson]) right<- list(left=x[rson], right=x[rson],
+                        depth=depth+1, sons=rson)
+    else               right<- compress(rson, depth+1)
 
-	maxd <- max(left$depth, right$depth) - depth
+    maxd <- max(left$depth, right$depth) - depth
         mind <- min(left$depth, right$depth) - depth
 
-	# Find the smallest distance between the two subtrees
-	#   But only over depths that they have in common
-	# 1 is a minimum distance allowed
-	slide <- min(right$left[1:mind] - left$right[1:mind]) -1
-	if (slide >0) { # slide the right hand node to the left
-	    x[right$sons] <- x[right$sons] - slide;
-	    x[me] <- (x[right$sons[1]] + x[left$sons[1]])/2
-#	    assign("x", x)
+    # Find the smallest distance between the two subtrees
+    #   But only over depths that they have in common
+    # 1 is a minimum distance allowed
+    slide <- min(right$left[1:mind] - left$right[1:mind]) -1
+    if (slide >0) { # slide the right hand node to the left
+        x[right$sons] <- x[right$sons] - slide;
+        x[me] <- (x[right$sons[1]] + x[left$sons[1]])/2
+#       assign("x", x)
             x <<- x
-	    }
-	else slide <- 0
+        }
+    else slide <- 0
 
-	# report back
+    # report back
         if (left$depth > right$depth) {
-	    templ <- left$left
+        templ <- left$left
             tempr <- left$right
             tempr[1:mind] <- pmax(tempr[1:mind], right$right -slide)
-	    }
+        }
         else {
-	    templ <- right$left  - slide
-	    tempr <- right$right - slide
-	    templ[1:mind] <- pmin(templ[1:mind], left$left)
-	    }
+        templ <- right$left  - slide
+        tempr <- right$right - slide
+        templ[1:mind] <- pmin(templ[1:mind], left$left)
+        }
 
-	list(left = c(x[me]- nspace*(x[me] -x[lson]), templ),
-	     right= c(x[me]- nspace*(x[me] -x[rson]), tempr),
-	     depth= maxd+ depth, sons=c(me, left$sons, right$sons))
-	}
+    list(left = c(x[me]- nspace*(x[me] -x[lson]), templ),
+         right= c(x[me]- nspace*(x[me] -x[rson]), tempr),
+         depth= maxd+ depth, sons=c(me, left$sons, right$sons))
+    }
 #    assign('compress', compress)
 #    assign('x', x)
 #    assign('is.leaf', is.leaf)
@@ -1954,7 +1954,7 @@ rpartco <- function(tree, parms =  paste(".rpart.parms", dev.cur(), sep = "."))
     list(x = x, y = y)
 }
 
-# SCCS @(#)rpconvert.s	1.3 06/08/01
+# SCCS @(#)rpconvert.s  1.3 06/08/01
 # Convert from the orginial style rpart object to the newer
 #  style object (the changes made when user-written splits were added)
 #
@@ -1966,44 +1966,44 @@ rpconvert <- function(x)
     ff <- x$frame
     if (is.null(ff$splits)) {
         # this appears to be a new style one already
-	warning("x not converted")
-	return(x)
+    warning("x not converted")
+    return(x)
     }
     ff$splits <- NULL
     ff$wt <- ff$n
 
     xlev <- attr(x, "xlevels")
     if (length(xlev) >0) {
-	zz <- as.numeric(names(xlev))
-	names(xlev) <- attr(x$terms, "term.labels")[zz]
-	attr(x, "xlevels") <- xlev
+    zz <- as.numeric(names(xlev))
+    names(xlev) <- attr(x$terms, "term.labels")[zz]
+    attr(x, "xlevels") <- xlev
     }
 
     if (x$method=="class") {
-	temp <- cbind(ff$yval, ff$yval2, ff$yprob)
-	dimnames(temp) <- NULL
-	ff$yval2 <- temp
-	ff$yprob <- NULL
-	x$frame <- ff
+    temp <- cbind(ff$yval, ff$yval2, ff$yprob)
+    dimnames(temp) <- NULL
+    ff$yval2 <- temp
+    ff$yprob <- NULL
+    x$frame <- ff
 
-	temp <- rpart.class(c(1,1,2,2), NULL, wt=c(1,1,1,1))#dummy call
-	x$functions <- list(summary=temp$summary, print=temp$print,
-			    text = temp$text)
+    temp <- rpart.class(c(1,1,2,2), NULL, wt=c(1,1,1,1))#dummy call
+    x$functions <- list(summary=temp$summary, print=temp$print,
+                text = temp$text)
     }
 
     else if (x$method=="anova") {
-	x$frame <- ff
+    x$frame <- ff
 
-	temp <- rpart.anova(1:5, NULL, wt=rep(1,5))#dummy call
-	x$functions <- list(summary=temp$summary, text = temp$text)
+    temp <- rpart.anova(1:5, NULL, wt=rep(1,5))#dummy call
+    x$functions <- list(summary=temp$summary, text = temp$text)
     }
 
     else {  #either exp or poisson (they have the same summary/text pair)
-	ff$yval2 <- cbind(ff$yval, ff$yval2)
-	x$frame <- ff
+    ff$yval2 <- cbind(ff$yval, ff$yval2)
+    x$frame <- ff
 
-	temp <- rpart.poisson(1:5, NULL, wt=rep(1,5))#dummy call
-	x$functions <- list(summary=temp$summary, text = temp$text)
+    temp <- rpart.poisson(1:5, NULL, wt=rep(1,5))#dummy call
+    x$functions <- list(summary=temp$summary, text = temp$text)
     }
 
     class(x) <- "rpart"
@@ -2012,7 +2012,7 @@ rpconvert <- function(x)
 ## This function plots the approximate r-square for the different
 ## splits (assumes using anova method).
 
-## SCCS @(#)rsq.rpart.s	1.6 08/28/97
+## SCCS @(#)rsq.rpart.s 1.6 08/28/97
 
 rsq.rpart <- function(x) {
 
@@ -2048,14 +2048,14 @@ rsq.rpart <- function(x) {
 #
 
 snip.rpart.mouse <- function(tree,
-		      parms=paste(".rpart.parms", dev.cur(), sep = ".")) {
+              parms=paste(".rpart.parms", dev.cur(), sep = ".")) {
     xy <- rpartco(tree)
     toss <- NULL
     ff <- tree$frame
     if (exists(parms, envir=.GlobalEnv)) {
         parms <- get(parms, envir=.GlobalEnv)
-	branch <- parms$branch
-	}
+    branch <- parms$branch
+    }
     else branch <- 1
 
     node <- as.numeric(row.names(tree$frame))
@@ -2063,41 +2063,41 @@ snip.rpart.mouse <- function(tree,
 
     lastchoice <- 0
     while (length(choose <- identify(xy, n=1, plot=FALSE)) >0 ) {
-	if (ff$var[choose] == '<leaf>') {
-		cat("Terminal node -- try again\n")
-		next
-		}
+    if (ff$var[choose] == '<leaf>') {
+        cat("Terminal node -- try again\n")
+        next
+        }
 
-	if (choose != lastchoice) {
-	    # print out some info on the click
-	    cat("node number:", node[choose], " n=", ff$n[choose], "\n")
-	    cat("    response=", format(ff$yval[choose]))
-	    if (is.null(ff$yval2)) cat ("\n")
-	    else if (is.matrix(ff$yval2))
-		  cat(" (", format(ff$yval2[choose,]), ")\n")
-	    else  cat(" (", format(ff$yval2[choose]), ")\n")
-	    cat("    Error (dev) = ", format(ff$dev[choose]), "\n")
-	    lastchoice <- choose
-	    }
-	else {
-	    # second click-- erase all of the descendants
-	    #   (stolen from snip.tree)
-	    id  <- node[choose]
-	    id2 <- node
-	    while (any(id2>1)) {
-		id2 <- floor(id2/2)
-		temp  <- (match(id2, id, nomatch=0) >0)
-  	        id <- c(id, node[temp])
-		id2[temp] <- 0
-		}
-	    temp <- match(id, node[ff$var != '<leaf>'], nomatch=0)
-	    lines(c(draw$x[,temp]), c(draw$y[,temp]), col=0)
-	    toss <- c(toss, node[choose])
-	    }
-	}
+    if (choose != lastchoice) {
+        # print out some info on the click
+        cat("node number:", node[choose], " n=", ff$n[choose], "\n")
+        cat("    response=", format(ff$yval[choose]))
+        if (is.null(ff$yval2)) cat ("\n")
+        else if (is.matrix(ff$yval2))
+          cat(" (", format(ff$yval2[choose,]), ")\n")
+        else  cat(" (", format(ff$yval2[choose]), ")\n")
+        cat("    Error (dev) = ", format(ff$dev[choose]), "\n")
+        lastchoice <- choose
+        }
+    else {
+        # second click-- erase all of the descendants
+        #   (stolen from snip.tree)
+        id  <- node[choose]
+        id2 <- node
+        while (any(id2>1)) {
+        id2 <- floor(id2/2)
+        temp  <- (match(id2, id, nomatch=0) >0)
+            id <- c(id, node[temp])
+        id2[temp] <- 0
+        }
+        temp <- match(id, node[ff$var != '<leaf>'], nomatch=0)
+        lines(c(draw$x[,temp]), c(draw$y[,temp]), col=0)
+        toss <- c(toss, node[choose])
+        }
+    }
     toss
     }
-#SCCS  @(#)snip.rpart.s	1.10 10/30/01
+#SCCS  @(#)snip.rpart.s 1.10 10/30/01
 #
 #  This routine "throws away" branches
 #
@@ -2107,8 +2107,8 @@ snip.rpart <- function(x, toss) {
 
     if (missing(toss) || length(toss)==0) {
         toss <- snip.rpart.mouse(x)
-	if (length(toss)==0) return(x)
-	}
+    if (length(toss)==0) return(x)
+    }
 
     where <- x$where
     ff   <- x$frame
@@ -2119,16 +2119,16 @@ snip.rpart <- function(x, toss) {
     toss <- unique(toss)
     toss.idx <- match(toss, id, nomatch=0) #the rows of the named nodes
     if (any(toss.idx ==0)) {
-	warning(paste("Nodes", toss[toss.idx==0], "are not in this tree"))
-	toss <- toss[toss.idx>0]
+    warning(paste("Nodes", toss[toss.idx==0], "are not in this tree"))
+    toss <- toss[toss.idx>0]
         toss.idx <- toss.idx[toss.idx>0]
         }
 
 #    if (any(toss==1))  {
-#	# a special case that causes grief later
-#	warning("Can't prune away the root node and still have a tree!")
+#   # a special case that causes grief later
+#   warning("Can't prune away the root node and still have a tree!")
 #        return(NULL)
-#	}
+#   }
 
     # Now add all of the descendants of the selected nodes
     #   We do this be finding all node's parents.
@@ -2137,11 +2137,11 @@ snip.rpart <- function(x, toss) {
     #     found children.  The loop should take <  log_2(maxdepth)/2 steps
     id2 <- id
     while (any(id2>1)) {
-	id2 <- floor(id2/2)
-	xx <- (match(id2, toss, nomatch=0) >0)
-	toss <- c(toss, id[xx])
+    id2 <- floor(id2/2)
+    xx <- (match(id2, toss, nomatch=0) >0)
+    toss <- c(toss, id[xx])
         id2[xx] <- 0
-	}
+    }
 
     # Now "toss" contains all of the nodes that should not be splits
     temp <- match(floor(toss/2) , toss, nomatch=0)  #which are leaves?
@@ -2155,9 +2155,9 @@ snip.rpart <- function(x, toss) {
     temp <- split[,2] >1      #which rows point to categoricals?
     if (any(temp)) {
         x$csplit <- x$csplit[split[temp,4], , drop=FALSE]
-	split[temp,4] <- 1
+    split[temp,4] <- 1
         if(is.matrix(x$csplit)) split[temp,4] <- 1:nrow(x$csplit)
-	}
+    }
     else x$csplit <- NULL
     x$splits <- split
 
@@ -2174,14 +2174,14 @@ snip.rpart <- function(x, toss) {
     id3 <- id[sort(c(keepit, newleaf))]
     temp <- match(id2, id3, nomatch=0)
     while (any(temp==0)) {
-	id2[temp==0] <- floor(id2[temp==0]/2)
-	temp <- match(id2, id3, nomatch=0)
-	}
+    id2[temp==0] <- floor(id2[temp==0]/2)
+    temp <- match(id2, id3, nomatch=0)
+    }
     x$where <- match(id2, id3)
 
     x
     }
-#SCCS  @(#)summary.rpart.s	1.18 07/05/01
+#SCCS  @(#)summary.rpart.s  1.18 07/05/01
 
 summary.rpart <- function(object, cp=0, digits=getOption("digits"), file,  ...)
 {
@@ -2193,9 +2193,9 @@ summary.rpart <- function(object, cp=0, digits=getOption("digits"), file,  ...)
     else  x <- object
 
     if (!missing(file)) {
-	  sink(file)
-	  on.exit(sink())
-	  }
+      sink(file)
+      on.exit(sink())
+      }
 
     if(!is.null(x$call)) {
         cat("Call:\n")
@@ -2248,55 +2248,55 @@ summary.rpart <- function(object, cp=0, digits=getOption("digits"), file,  ...)
                                       ff$wt[rows], ylevel, digits)
 
     for (ii in 1:length(rows)) {
-	i <- rows[ii]
-	nn <- ff$n[i]
-	twt <- ff$wt[i]
-	cat("\nNode number ", id[i], ": ", nn, " observations", sep='')
-	if (ff$complexity[i] < cp || is.leaf[i]) cat("\n")
-	else cat(",    complexity param=",
+    i <- rows[ii]
+    nn <- ff$n[i]
+    twt <- ff$wt[i]
+    cat("\nNode number ", id[i], ": ", nn, " observations", sep='')
+    if (ff$complexity[i] < cp || is.leaf[i]) cat("\n")
+    else cat(",    complexity param=",
                  format(signif(ff$complexity[i], digits)), "\n", sep="")
 
-	cat(tprint[ii], "\n")
-	if (ff$complexity[i] > cp && !is.leaf[i] ){
-	    sons <- 2*id[i] + c(0,1)
-	    sons.n <- ff$n[match(sons, id)]
-	    cat("  left son=", sons[1], " (", sons.n[1], " obs)",
-		" right son=", sons[2], " (", sons.n[2], " obs)", sep='')
-	    j <- nn - (sons.n[1] + sons.n[2])
-	    if (j>1) cat(", ", j, " observations remain\n", sep='')
-	    else if (j==1) cat(", 1 observation remains\n")
-	    else     cat("\n")
-	    cat("  Primary splits:\n")
-	    j <- seq(index[i], length=1+ff$ncompete[i])
-	    if (all(nchar(cuts[j]) < 25))
+    cat(tprint[ii], "\n")
+    if (ff$complexity[i] > cp && !is.leaf[i] ){
+        sons <- 2*id[i] + c(0,1)
+        sons.n <- ff$n[match(sons, id)]
+        cat("  left son=", sons[1], " (", sons.n[1], " obs)",
+        " right son=", sons[2], " (", sons.n[2], " obs)", sep='')
+        j <- nn - (sons.n[1] + sons.n[2])
+        if (j>1) cat(", ", j, " observations remain\n", sep='')
+        else if (j==1) cat(", 1 observation remains\n")
+        else     cat("\n")
+        cat("  Primary splits:\n")
+        j <- seq(index[i], length=1+ff$ncompete[i])
+        if (all(nchar(cuts[j]) < 25))
                 temp <- format(cuts[j], justify="left")
-	    else  temp <- cuts[j]
-	    cat(paste("      ", format(sname[j], justify="left"), " ", temp,
-		      " improve=", format(signif(x$splits[j,3], digits)),
-		      ", (", nn - x$splits[j,1], " missing)", sep=''),
+        else  temp <- cuts[j]
+        cat(paste("      ", format(sname[j], justify="left"), " ", temp,
+              " improve=", format(signif(x$splits[j,3], digits)),
+              ", (", nn - x$splits[j,1], " missing)", sep=''),
                 sep="\n")
-	    if (ff$nsurrogate[i] >0) {
-		cat("  Surrogate splits:\n")
-		j <- seq(1 +index[i] + ff$ncompete[i], length=ff$nsurrogate[i])
-		agree <- x$splits[j,3]
-		if (all(nchar(cuts[j]) < 25))
+        if (ff$nsurrogate[i] >0) {
+        cat("  Surrogate splits:\n")
+        j <- seq(1 +index[i] + ff$ncompete[i], length=ff$nsurrogate[i])
+        agree <- x$splits[j,3]
+        if (all(nchar(cuts[j]) < 25))
                     temp <- format(cuts[j], justify="left")
-		else  temp <- cuts[j]
-		if (ncol(x$splits)==5) {
-		    adj   <- x$splits[j,5]
-		    cat(paste("      ", format(sname[j], justify="left"), " ",
-			      temp,
-			      " agree=", format(round(agree, 3)),
-			      ", adj=" , format(round(adj, 3)),
-			      ", (", x$splits[j,1], " split)", sep=''),
-			sep="\n")
+        else  temp <- cuts[j]
+        if (ncol(x$splits)==5) {
+            adj   <- x$splits[j,5]
+            cat(paste("      ", format(sname[j], justify="left"), " ",
+                  temp,
+                  " agree=", format(round(agree, 3)),
+                  ", adj=" , format(round(adj, 3)),
+                  ", (", x$splits[j,1], " split)", sep=''),
+            sep="\n")
                 }
-		else {                  #an older style rpart object -- no adj value present
-		    cat(paste("      ", format(sname[j], justify="left"), " ",
-			      temp,
-			      " agree=", format(round(agree, 3)),
-			      ", (", x$splits[j,1], " split)", sep=''),
-			sep="\n")
+        else {                  #an older style rpart object -- no adj value present
+            cat(paste("      ", format(sname[j], justify="left"), " ",
+                  temp,
+                  " agree=", format(round(agree, 3)),
+                  ", (", x$splits[j,1], " split)", sep=''),
+            sep="\n")
                 }
             }
         }
@@ -2304,7 +2304,7 @@ summary.rpart <- function(object, cp=0, digits=getOption("digits"), file,  ...)
     cat("\n")
     invisible(x)
 }
-# SCCS @(#)text.rpart.s	1.12 06/06/01
+# SCCS @(#)text.rpart.s 1.12 06/06/01
 # This is a modification of text.tree.
 # Fancy option has been added in (to mimic post.tree)
 #
@@ -2313,7 +2313,7 @@ text.rpart <- function (x, splits = TRUE, which = 1, label = "yval", FUN = text,
     all = FALSE, pretty = NULL, digits = getOption("digits") - 2, tadj = 0.65,
     stats = TRUE, use.n = FALSE, bars = TRUE, xadj = 1, yadj = 1, bord = FALSE,
     big.pts = FALSE, ...) 
-	{
+    {
     if (!inherits(x, "rpart")) 
         stop("Not legitimate rpart")
     if (!is.null(x$frame$splits)) 
@@ -2390,7 +2390,7 @@ text.rpart <- function (x, splits = TRUE, which = 1, label = "yval", FUN = text,
 }
 
 
-# SCCS @(#)xpred.rpart.s	1.18 07/05/01
+# SCCS @(#)xpred.rpart.s    1.18 07/05/01
 #
 #  Get a set of cross-validated predictions
 
@@ -2407,39 +2407,39 @@ xpred.rpart <- function(fit, xval=10, cp)
     X <- fit$x
     wt<- fit$wt
     if (is.null(Y) || is.null(X)) {
-	m <- fit$model
-	if (is.null(m)) {
-	    m <-fit$call[match(c("", 'formula', 'data', 'weights', 'subset',
+    m <- fit$model
+    if (is.null(m)) {
+        m <-fit$call[match(c("", 'formula', 'data', 'weights', 'subset',
                                  'na.action'),
                                names(fit$call), nomatch=0)]
-	    if (is.null(m$na.action)) m$na.action<- na.rpart
-	    m[[1]] <- as.name("model.frame.default")
-	    m <- eval(m, parent.frame())
+        if (is.null(m$na.action)) m$na.action<- na.rpart
+        m[[1]] <- as.name("model.frame.default")
+        m <- eval(m, parent.frame())
         }
-	if (is.null(X)) X <- rpart.matrix(m)
-	if (is.null(wt)) wt <- model.extract(m, "weights")
-	if (is.null(Y)) {
-	    yflag <- TRUE
-	    Y <- model.extract(m, "response")
+    if (is.null(X)) X <- rpart.matrix(m)
+    if (is.null(wt)) wt <- model.extract(m, "weights")
+    if (is.null(Y)) {
+        yflag <- TRUE
+        Y <- model.extract(m, "response")
             offset <- attr(Terms, "offset")
-	    if (method != user) {
-		init <- (get(paste("rpart", method, sep='.')))(Y,offset, NULL)
-		Y <- as.matrix(init$y)
-		numy <- ncol(Y)
+        if (method != user) {
+        init <- (get(paste("rpart", method, sep='.')))(Y,offset, NULL)
+        Y <- as.matrix(init$y)
+        numy <- ncol(Y)
             }
         }
-	else {
-	    yflag <- FALSE
-	    Y <- as.matrix(Y)
-	    numy <- ncol(Y)
-	    offset <- 0
+    else {
+        yflag <- FALSE
+        Y <- as.matrix(Y)
+        numy <- ncol(Y)
+        offset <- 0
         }
     }
     else {
-	yflag <- FALSE
-	Y <- as.matrix(Y)
-	numy <- ncol(Y)
-	offset <- 0
+    yflag <- FALSE
+    Y <- as.matrix(Y)
+    numy <- ncol(Y)
+    offset <- 0
     }
 
     nobs <- nrow(X)
@@ -2455,33 +2455,33 @@ xpred.rpart <- function(fit, xval=10, cp)
 
     controls <- fit$control
     if (missing(cp)) {
-	cp<- fit$cptable[,1]
-	cp <- sqrt(cp * c(10, cp[-length(cp)]))
-	cp[1] <- (1+fit$cptable[1,1])/2
+    cp<- fit$cptable[,1]
+    cp <- sqrt(cp * c(10, cp[-length(cp)]))
+    cp[1] <- (1+fit$cptable[1,1])/2
     }
     ncp <- length(cp)
 
     if (length(xval)==1) {
                                         # make random groups
-	xgroups <- sample(rep(1:xval, length=nobs), nobs, replace=FALSE)
+    xgroups <- sample(rep(1:xval, length=nobs), nobs, replace=FALSE)
     }
     else if (length(xval) == nrow(Y)) {
-	xgroups <- xval
-	xval <- length(unique(xgroups))
+    xgroups <- xval
+    xval <- length(unique(xgroups))
     }
     else {
         ## Check to see if observations were removed due to missing
-	if (!is.null(fit$na.action)) {
+    if (!is.null(fit$na.action)) {
             ## if na.rpart was used, then na.action will be a vector
-	    temp <- as.integer(fit$na.action)
-	    xval <- xval[-temp]
-	    if (length(xval) == nobs) {
-		xgroups <- xval
-		xval <- length(unique(xgroups))
+        temp <- as.integer(fit$na.action)
+        xval <- xval[-temp]
+        if (length(xval) == nobs) {
+        xgroups <- xval
+        xval <- length(unique(xgroups))
             }
-	    else stop("Wrong length for xval")
+        else stop("Wrong length for xval")
         }
-	else stop("Wrong length for xval")
+    else stop("Wrong length for xval")
     }
 
     costs <- fit$call$costs
@@ -2489,9 +2489,9 @@ xpred.rpart <- function(fit, xval=10, cp)
 
     parms <- fit$parms
     if (method=='user') {
-	mlist <- fit$functions
-	if (length(parms)==0) init <- mlist$init(Y, offset, wt=wt)
-	else                  init <- mlist$init(Y, offset, parms, wt)
+    mlist <- fit$functions
+    if (length(parms)==0) init <- mlist$init(Y, offset, wt=wt)
+    else                  init <- mlist$init(Y, offset, parms, wt)
 
         ## assign this to avoid garbage collection
         keep <- rpartcallback(mlist, nobs, init)
@@ -2524,9 +2524,9 @@ xpred.rpart <- function(fit, xval=10, cp)
 }
 
 .First.lib <- function(lib, pkg) {
-	library.dynam("mvpart", pkg, lib)
-	cat(" mvpart package loaded: extends rpart to include\n") 
-	cat(" multivariate and distance-based partitioning\n\n")
+    library.dynam("mvpart", pkg, lib)
+#    cat(" mvpart package loaded: extends rpart to include\n") 
+#    cat(" multivariate and distance-based partitioning\n\n")
 }
 
 .noGenerics <- TRUE
@@ -2709,66 +2709,61 @@ rpart.pca <- function (tree, pts = TRUE, plt.allx = TRUE, speclab = TRUE,
     invisible()
 }
 
-
 gdist <- function(x, method = "bray", keepdiag = FALSE , full = FALSE, sq = FALSE)
 {
-	METHODS <- c("manhattan", "euclidean", "canberra", "bray", "kulczynski", "gower", 
-	"maximum", "binary", "chisq", "chord")
-	method <- pmatch(method, METHODS)
-	if(is.na(method))
-		stop("invalid distance method")
-	N <- nrow(x <- as.matrix(x))
-	if(method == 6) {
-		mx <- apply(x, 2, max)
-		mn <- apply(x, 2, min)
-		x <- x/rep(mx - mn, N)
-		method <- 2
-	}
-	else if(method == 9) {
-		rr <- apply(x, 1, sum)
-		cc <- apply(x, 2, sum)
-		x <- diag(1/sqrt(rr)) %*% x %*% diag(1/sqrt(cc))
-		method <- 2
-	}
-	else if(method == 10) {
-		mns <- sqrt(apply(x^2, 1, sum))
-		x <- x/(mns * sqrt(2))
-		method <- 2
-	}
-	d <- .C("gdistance",
-		x = as.double(x),
-		nr = N,
-		nc = ncol(x),
-		d = double((N * (N - 1))/2),
-		keepdiag = as.integer(FALSE),
-		method = as.integer(method))$d
-	attr(d, "Size") <- N
-	class(d) <- "dist"
-	if (full) d <- distfull(d)
-	if (sq) d <- d^2
-	d
+    METHODS <- c("manhattan", "euclidean", "canberra", "bray", "kulczynski", "gower", 
+    "maximum", "binary", "chisq", "chord")
+    method <- pmatch(method, METHODS)
+    if(is.na(method))
+        stop("invalid distance method")
+    N <- nrow(x <- as.matrix(x))
+    if (method == 6) x <- scaler(x,col=c("min0","max1"))     
+    if(method == 9) {
+        rr <- apply(x, 1, sum)
+        cc <- apply(x, 2, sum)
+        x <- diag(1/sqrt(rr)) %*% x %*% diag(1/sqrt(cc))
+        method <- 2
+    }
+    else if(method == 10) {
+        mns <- sqrt(apply(x^2, 1, sum))
+        x <- x/(mns * sqrt(2))
+        method <- 2
+    }
+    d <- .C("gdistance",
+        x = as.double(x),
+        nr = N,
+        nc = ncol(x),
+        d = double((N * (N - 1))/2),
+        keepdiag = as.integer(FALSE),
+        method = as.integer(method),
+        PACKAGE="mvpart")$d
+    attr(d, "Size") <- N
+    class(d) <- "dist"
+    if (full) d <- distfull(d)
+    if (sq) d <- d^2
+    d
 }
 
 
 xdiss <- function(data, dcrit = 1, dauto = TRUE , dinf = 0.5, method = "man", use.min = TRUE, 
-		eps = 0.0001, replace.neg = TRUE, big = 10000, sumry = TRUE, full = FALSE, sq = FALSE)
+        eps = 0.0001, replace.neg = TRUE, big = 10000, sumry = TRUE, full = FALSE, sq = FALSE)
 { 
-		scale.row <- function(data, p = 1) 		{
-		tmp <- apply(data, 1, sum, na.rm = TRUE )
-		if(any(t0 <- (tmp == 0)))
-		cat(sum(t0), " rows with sum = 0 !!  -- these rows untransformed\n")
-		if(p == 1)
-			data[!t0,  ] <- data[!t0,  ]/apply(data[!t0,  ], 1, sum, na.rm = TRUE )
-		else if(p == 2)
-			data[!t0,  ] <- data[!t0,  ]/(apply(data[!t0,  ]^2, 1, sum, na.rm = TRUE ))^0.5
-		data
-		}	
+        scale.row <- function(data, p = 1)      {
+        tmp <- apply(data, 1, sum, na.rm = TRUE )
+        if(any(t0 <- (tmp == 0)))
+        cat(sum(t0), " rows with sum = 0 !!  -- these rows untransformed\n")
+        if(p == 1)
+            data[!t0,  ] <- data[!t0,  ]/apply(data[!t0,  ], 1, sum, na.rm = TRUE )
+        else if(p == 2)
+            data[!t0,  ] <- data[!t0,  ]/(apply(data[!t0,  ]^2, 1, sum, na.rm = TRUE ))^0.5
+        data
+        }   
 
-		METHODS <- c("manhattan", "euclidean", "canberra", "bray", "kulczynski", "gower", 
-		"maximum", "binary", "chisq", "chord")
-		method <- METHODS[pmatch(method, METHODS)]
-		if(is.na(method))
-		stop("invalid distance method")
+        METHODS <- c("manhattan", "euclidean", "canberra", "bray", "kulczynski", "gower", 
+        "maximum", "binary", "chisq", "chord")
+        method <- METHODS[pmatch(method, METHODS)]
+        if(is.na(method))
+        stop("invalid distance method")
         if(any(data < 0))
                 data <- apply(data, 2, function(x)
                 x - min(x))
@@ -2828,7 +2823,8 @@ xdiss <- function(data, dcrit = 1, dauto = TRUE , dinf = 0.5, method = "man", us
                 dcrit,
                 use.min,
                 eps,
-                big)$d
+                big,
+                PACKAGE="mvpart")$d
         if(any(dnew == -1, na.rm = TRUE ))
                 attr(dnew, "ok") <- F
         else attr(dnew, "ok") <- TRUE 
@@ -2840,10 +2836,10 @@ xdiss <- function(data, dcrit = 1, dauto = TRUE , dinf = 0.5, method = "man", us
                 cat("Summary of Extended Dissimilarities\n")
                 print(summary(dnew))
         }
-	    attr(dnew, "Size") <- n
+        attr(dnew, "Size") <- n
         class(dnew) <- "dist"
         if (full) dnew <- distfull(dnew)
-		if (sq) dnew <- dnew^2
+        if (sq) dnew <- dnew^2
         dnew
 }
 
@@ -2888,19 +2884,19 @@ fun = function (x, method, MARGIN)
     })
     x
 }
-	METHODS <- c("mean1", "max1", "min0", "ssq1", "range01", "zsc", "pa", "rank")
-	if (is.null(col) & is.null(row)) 
-    	cat("Scalings are",METHODS,"\n")
-	if (!is.null(col)) {
+    METHODS <- c("mean1", "max1", "min0", "ssq1", "range01", "zsc", "pa", "rank")
+    if (is.null(col) & is.null(row)) 
+        cat("Scalings are",METHODS,"\n")
+    if (!is.null(col)) {
     for (i in 1:length(col)){
-    	method <- match.arg(col[i], METHODS)
-    	x <- fun(x, method = method, MARGIN = 2)
+        method <- match.arg(col[i], METHODS)
+        x <- fun(x, method = method, MARGIN = 2)
     }
-	}
-	if (!is.null(row)) {
-    	for (i in 1:length(row)){
-    	method <- match.arg(row[i], METHODS)
-    	x <- fun(x, method = method, MARGIN = 1)
+    }
+    if (!is.null(row)) {
+        for (i in 1:length(row)){
+        method <- match.arg(row[i], METHODS)
+        x <- fun(x, method = method, MARGIN = 1)
     }
 }
 x
@@ -2913,12 +2909,12 @@ cmds.diss <- function (data, k = ncol(data), x.use = FALSE, method = "man",
     if (x.use) {
         xdists <- xdiss(data, method = method, dauto = TRUE , dcrit = 0.6)
         xds <- cmdscale(xdists, k = k)
-		colnames(xds) <- paste("s",1:ncol(xds),sep="")
+        colnames(xds) <- paste("s",1:ncol(xds),sep="")
             }
     else {
         xdists <- gdist(data, method = method)
         xds <- cmdscale(xdists, k = k)
- 		colnames(xds) <- paste("s",1:ncol(xds),sep="")
+        colnames(xds) <- paste("s",1:ncol(xds),sep="")
 
            }
     if (zero.chk) {
@@ -2930,8 +2926,8 @@ cmds.diss <- function (data, k = ncol(data), x.use = FALSE, method = "man",
         }
     }
     if (plt) {
-    	n <- nrow(data)
-    	if (n < 30 || !plot.subset) 
+        n <- nrow(data)
+        if (n < 30 || !plot.subset) 
         plot(xdists, dxds <- dist(xds), xlim = c(0, max(xdists)), 
             ylim = c(0, max(dxds)), xlab = "Dists", ylab = "CMDS Dists", pch=1)
         else { 
@@ -2939,7 +2935,7 @@ cmds.diss <- function (data, k = ncol(data), x.use = FALSE, method = "man",
         dxds <- dist(xds)
         plot(xdists[samp], dxds[samp], xlim = c(0, md <- max(xdists)), 
             ylim = c(0, max(dxds)), xlab = "Dists", ylab = "CMDS Dists", pch=1)
-		}    
+        }    
         abline(c(0, 1), col = 2, xpd = FALSE)
         mtext("Pairwise distances vs CMD scaled pairwise distances", 
             3, line = 1.5)
@@ -2952,10 +2948,10 @@ cmds.diss <- function (data, k = ncol(data), x.use = FALSE, method = "man",
 
 distfull <- function(dis)
 {
-	n <- attr(dis, "Size")
-	full <- matrix(0, n, n)
-	full[lower.tri(full)] <- dis
-	full + t(full)
+    n <- attr(dis, "Size")
+    full <- matrix(0, n, n)
+    full[lower.tri(full)] <- dis
+    full + t(full)
 }
 
 trclcomp <- function(x, method = "com")
@@ -2989,6 +2985,5 @@ trclcomp <- function(x, method = "com")
     title("Comparison of tree and cluster errors across size")
     cat("Tree error     : ", signif(tree.err, 3), "\n")
     cat("Cluster error  : ", signif(clust.err, 3), "\n")
-	invisible(list(tree.err = tree.err, clust.err = clust.err))
+    invisible(list(tree.err = tree.err, clust.err = clust.err))
     }
-

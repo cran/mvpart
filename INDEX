@@ -1,15 +1,11 @@
 car.test.frame          Automobile Data from 'Consumer Reports' 1990
-cmds.diss				Computes a dissimilarity matrix according to a
-						specified method
-cu.summary              Automobile Data from 'Consumer Reports' 1990
-gdist					Computes useful dissimilarity indices for 
-						ordination and/or multivariate partitioning
+cmds.diss               Classical Scaling of Dissimilarity Measures
+gdist                   Dissimilarity Measures
 kyphosis                Data on Children who have had Corrective
                         Spinal Surgery
 labels.rpart            Create Split Labels For an Rpart Object
 meanvar.rpart           Mean-Variance Plot for an Rpart Object
-mvpart					Wrapper function for rpart facilitate partitioning,
-						diagnostics and plotting trees.
+mvpart                  Recursive Partitioning and Regression Trees
 na.rpart                Handles Missing Values in an Rpart Object
 path.rpart              Follow Paths to Selected Nodes of an Rpart
                         Object
@@ -23,22 +19,23 @@ print.rpart             Print an Rpart Object
 printcp                 Displays CP table for Fitted Rpart Object
 prune.rpart             Cost-complexity Pruning of an Rpart Object
 residuals.rpart         Residuals From a Fitted Rpart Object
-rpart                   Recursive Partitioning for Classification and 
-						Regression Trees and Multivariate and Dissimilarity Trees
+rpart                   Recursive Partitioning and Regression Trees
 rpart.control           Control for Rpart Models
 rpart.matrix            Creates a Model Matrix from a Call to Rpart
 rpart.object            Recursive Partitioning and Regression Trees
                         Object
-rpart.pca 				Principle Components Plot of a Multivariate Rpart Object
+rpart.pca               Principle Components Plot of a Multivariate
+                        Rpart Object
 rpconvert               Update an rpart object
 rsq.rpart               Plots the Approximate R-Square for the
                         Different Splits
-scaler					Provides some standardization methods for matrices
+scaler                  Row and Column Scaling of a Data Matrix
 snip.rpart              Snip Subtrees of an Rpart Object
 solder                  Soldering of Components on Printed-Circuit
                         Boards
+spider                  Spider Data
 summary.rpart           Summarize a Fitted Rpart Object
-text.rpart              Place Text and Graphics on a Dendrogram
-xdiss					Computes extended dissimilarity indices for long
-						gradients
+text.rpart              Place Text on a Dendrogram
+trclcomp                Tree-Clustering Comparison
+xdiss                   Extendend Dissimilarity Measures
 xpred.rpart             Return Cross-Validated Predictions

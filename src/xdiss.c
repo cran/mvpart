@@ -1,9 +1,9 @@
 void xdists(dist,nn,dcrit,usemin,eps,bigd)
-long *nn,*usemin;
+int *nn,*usemin;
 double *dist, *dcrit, *eps, *bigd;
 {
 double maxd,mind,sum,big=*bigd,dki,dkj,adj,mink;
-long i,j,k,ki,kj,pos,n=*nn,ndist,nbig,nbigold,nloop,count;
+int i,j,k,ki,kj,pos,n=*nn,ndist,nbig,nbigold,nloop,count;
 ndist = n*(n-1)/2;
 nbig = 0;
 maxd = 0;
@@ -88,4 +88,3 @@ maxd=maxd-mind+adj;
 
 }
 }
-
