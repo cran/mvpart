@@ -113,15 +113,27 @@ eqscplt <- function(x, y, tol = 0.15, sym = FALSE , ...)
         list(xlim = xlim, ylim = ylim)
 }
 
-mvpart <- function (form, data, minauto = TRUE, size, xv = c("1se", "min", 
+mvpart <-
+function (form, data, minauto = TRUE, size, xv = c("1se", "min", 
     "pick", "none"), xval = 10, xvmult = 0, xvse = 1, snip = FALSE, 
-    plot.add = TRUE , text.add = TRUE , digits = 3, margin = 0, uniform = FALSE, 
-    which = 1, pretty = TRUE, use.n = TRUE, all = FALSE, bord = FALSE, 
+    plot.add = TRUE, text.add = TRUE, digits = 3, margin = 0, 
+    uniform = FALSE, which = 4, pretty = TRUE, use.n = TRUE, 
+    all.leaves = FALSE, bars = TRUE, legend, bord = FALSE, 
     xadj = 1, yadj = 1, prn = FALSE, branch = 1, rsq = FALSE, 
-    big.pts = FALSE, pca = FALSE, interact.pca = FALSE, wgt.ave.pca = FALSE, 
-    ...) 
+    big.pts = FALSE, pca = FALSE, interact.pca = FALSE, 
+    wgt.ave.pca = FALSE, ...) 
 {
     call <- match.call()
+    cv.var <- 
+    function(x, cv = 10)  {
+        x <- match(x, sort(unique(x)))
+        luni <- length(unique(x))
+        if(luni >= cv) {
+        grps <- ceiling((cv * cumsum(table(x)))/length(x))
+        x <- number(grps[x])
+        }
+        x
+    }
     if (length(xval) > 1) {
         if (xvmult > 1) 
             xvalvar <- xval
@@ -138,11 +150,15 @@ mvpart <- function (form, data, minauto = TRUE, size, xv = c("1se", "min",
     }
     use.size <- FALSE
     z <- rpart(form, data = data, xval = xval, ...)
+    if (all(z$where==1)) {
+    cat("No splits possible -- try decreasing cp\n")
+    return(z)
+    }
     old.par <- par(mar = c(6, 4, 4, 4) + 0.1, xpd = NA)
     on.exit(par(old.par))
     if (!is.null(z)) {
-                xval <- z$control$xval
-                if (xvmult > 1) {
+        xval <- z$control$xval
+        if (xvmult > 1) {
             zresse <- zres <- matrix(NA, nrow = nrow(z$cptable), 
                 ncol = xvmult)
             zres[, 1] <- z$cptable[, 4]
@@ -197,7 +213,7 @@ mvpart <- function (form, data, minauto = TRUE, size, xv = c("1se", "min",
             }
             else {
                 (cat("No pruning possible : size 2 tree produced ?? \n"))
-                use.size <- TRUE 
+                use.size <- TRUE
                 size <- 2
             }
         }
@@ -225,8 +241,9 @@ mvpart <- function (form, data, minauto = TRUE, size, xv = c("1se", "min",
                 margin = margin)
             if (text.add) 
                 text.rpart(z, digits = digits, xadj = xadj, yadj = yadj, 
-                  which = which, pretty = pretty, use.n = use.n, all = all, 
-                  bord = bord, big.pts = big.pts | pca)
+                  which = which, pretty = pretty, use.n = use.n, bars = bars,
+                  legend = ifelse(missing(legend),(z$method=="mrt") && (ncol(z$y)<20),legend),
+                  all.leaves = all.leaves, bord = bord, big.pts = big.pts | pca)
             len <- dim(z$cptable)[1]
             foot <- paste("Error : ", signif(z$cptable[len, 3], 
                 digits))
@@ -255,7 +272,7 @@ mvpart <- function (form, data, minauto = TRUE, size, xv = c("1se", "min",
         }
     }
     else {
-        plot(c(-1, 1), c(-1, 1), axes = FALSE , type = "n", xlab = "", 
+        plot(c(-1, 1), c(-1, 1), axes = FALSE, type = "n", xlab = "", 
             ylab = "")
         text(c(0), c(0), "No splits could be formed", col = 2)
         cat("No splits could be formed\n")
@@ -2309,11 +2326,12 @@ summary.rpart <- function(object, cp=0, digits=getOption("digits"), file,  ...)
 # Fancy option has been added in (to mimic post.tree)
 #
 
-text.rpart <- function (x, splits = TRUE, which = 1, label = "yval", FUN = text, 
-    all = FALSE, pretty = NULL, digits = getOption("digits") - 2, tadj = 0.65,
-    stats = TRUE, use.n = FALSE, bars = TRUE, xadj = 1, yadj = 1, bord = FALSE,
-    big.pts = FALSE, ...) 
-    {
+text.rpart <- 
+function (x, splits = TRUE, which = 4, label = "yval", FUN = text, 
+    all.leaves = FALSE, pretty = NULL, digits = getOption("digits") - 2,
+    tadj = 0.65, stats = TRUE, use.n = FALSE, bars = TRUE, 
+    legend = FALSE, xadj = 1, yadj = 1, bord = FALSE, big.pts = FALSE, ...) 
+{
     if (!inherits(x, "rpart")) 
         stop("Not legitimate rpart")
     if (!is.null(x$frame$splits)) 
@@ -2334,9 +2352,8 @@ text.rpart <- function (x, splits = TRUE, which = 1, label = "yval", FUN = text,
     is.left <- (node%%2 == 0)
     node.left <- node[is.left]
     parent <- match(node.left/2, node)
-    add.bars <- bars & is.matrix(frame$yval2)
-    text.adj <- ifelse(add.bars, yadj * diff(range(xy$y))/12, 
-        0)
+    bars <- bars & is.matrix(frame$yval2)
+    text.adj <- ifelse(bars, yadj * diff(range(xy$y))/12, 0)
     if (splits) {
         left.child <- match(2 * node, node)
         right.child <- match(node * 2 + 1, node)
@@ -2353,7 +2370,7 @@ text.rpart <- function (x, splits = TRUE, which = 1, label = "yval", FUN = text,
                   pos = 4, ...)
         }
     }
-    leaves <- if (all) 
+    leaves <- if (all.leaves) 
         rep(TRUE, nrow(frame))
     else frame$var == "<leaf>"
     if (stats) {
@@ -2369,26 +2386,24 @@ text.rpart <- function (x, splits = TRUE, which = 1, label = "yval", FUN = text,
         FUN(xy$x[leaves], xy$y[leaves] - tadj * cxy[2] - text.adj, 
             stat, adj = 0.5, ...)
     }
-    if (add.bars) {
+    if (bars) {
         bar.vals <- x$functions$bar(yval2 = frame$yval2)
         sub.barplot(xy$x, xy$y, bar.vals, leaves, xadj = xadj, 
-            yadj = yadj, bord = bord, line = TRUE , col = c("lightblue", 
+            yadj = yadj, bord = bord, line = TRUE, col = c("lightblue", 
                 "blue", "darkblue"))
         rx <- range(xy$x)
         ry <- range(xy$y)
         if (!is.null(ylevels)) 
             bar.labs <- ylevels
         else bar.labs <- dimnames(x$y)[[2]]
-        legend(min(xy$x) - 0.1 * rx, max(xy$y) + 0.05 * ry, bar.labs, 
-            col = c("lightblue", "blue", "darkblue"), pch = 15, 
-            bty = "n", ...)
+     if (legend) legend(min(xy$x) - 0.1 * rx, max(xy$y) + 0.05 * ry, bar.labs, 
+            col = c("lightblue", "blue", "darkblue"), pch = 15, bty = "n", ...)
     }
     if (big.pts) 
-        points(xy$x[leaves], xy$y[leaves], pch = 16, cex=3*par()$cex, col = 2:(sum(leaves) + 
-            1))
+        points(xy$x[leaves], xy$y[leaves], pch = 16, cex = 3 * 
+            par()$cex, col = 2:(sum(leaves) + 1))
     invisible()
 }
-
 
 # SCCS @(#)xpred.rpart.s    1.18 07/05/01
 #

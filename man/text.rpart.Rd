@@ -7,11 +7,12 @@
   Labels the current plot of the tree dendrogram with text.
 }
 \usage{
-\method{text}{rpart}function (x, splits = TRUE, which = 1, label = "yval", FUN = text, 
-    all = FALSE, pretty = NULL, digits = getOption("digits") - 
-        2, tadj = 0.65, stats = TRUE, use.n = FALSE, bars = TRUE, 
-    xadj = 1, yadj = 1, bord = FALSE, big.pts = FALSE, \dots)
+\method{text}{rpart}(x, splits = TRUE, which = 4, label = "yval", FUN = text, 
+    all.leaves = FALSE, pretty = NULL, digits = getOption("digits") - 2,
+    tadj = 0.65, stats = TRUE, use.n = FALSE, bars = TRUE, 
+    legend = FALSE, xadj = 1, yadj = 1, bord = FALSE, big.pts = FALSE, \dots)
 }
+
 \arguments{
 \item{x}{
   fitted model object of class \code{rpart}.  This is assumed to be the result
@@ -36,7 +37,7 @@ of that factor level.
 \item{FUN}{
   the name of a labeling function, e.g. \code{text}.  
 }
-\item{all}{
+\item{all.leaves}{
   Logical.  If \code{TRUE}, all nodes are labeled, otherwise just
   terminal nodes.
 }
@@ -63,6 +64,9 @@ Adjustment of text above (or below) splits.
 }
 \item{bars}{
   If \code{TRUE} adds barplots for multivariate regression trees.
+}
+\item{legend}{
+  If \code{TRUE} adds legends for multivariate regression trees.
 }
 \item{xadj, yadj}{
  varies the size of barplots for multivariate regression trees.

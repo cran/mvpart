@@ -8,12 +8,13 @@ Wrapper function for fitting and plotting \code{rpart} models
 }
 
 \usage{
-mvpart(form, data, minauto = TRUE, size, xv = c("1se", "min", "pick", "none"), 
-    xval = 10, xvmult = 0, xvse = 1, snip = FALSE,
-    plot.add = TRUE, text.add = TRUE, digits = 3, margin = 0, uniform = FALSE,
-    which = 1, pretty = TRUE, use.n = TRUE, 
-    all = FALSE, bord = FALSE, xadj = 1, yadj = 1, prn = FALSE, 
-    branch = 1, rsq = FALSE, big.pts = FALSE, pca = FALSE, interact.pca = FALSE, 
+mvpart(form, data, minauto = TRUE, size, xv = c("1se", "min", 
+    "pick", "none"), xval = 10, xvmult = 0, xvse = 1, snip = FALSE, 
+    plot.add = TRUE, text.add = TRUE, digits = 3, margin = 0, 
+    uniform = FALSE, which = 4, pretty = TRUE, use.n = TRUE, 
+    all.leaves = FALSE, bars = TRUE, legend, bord = FALSE, 
+    xadj = 1, yadj = 1, prn = FALSE, branch = 1, rsq = FALSE, 
+    big.pts = FALSE, pca = FALSE, interact.pca = FALSE, 
     wgt.ave.pca = FALSE, \dots) 
 }
 
@@ -74,8 +75,14 @@ Pretty labels or full labels.
 \item{use.n}{
 Add number of cases at each node.
 }
-\item{all}{
+\item{all.leaves}{
 Annotate all nodes.
+}
+\item{bars}{
+If \code{TRUE} adds barplots to nodes.
+}
+\item{legend}{
+If \code{TRUE} adds legend for mrt and classification trees.
 }
 \item{bord}{
 Border (box) around the barplots.

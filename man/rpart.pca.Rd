@@ -7,7 +7,7 @@ Principle Components Plot of a Multivariate Rpart Object
 Plots a PCA of the rpart object on the current graphics device.
 }
 \usage{
-\rpart.pca(tree, pts = TRUE, plt.allx = TRUE, speclab = TRUE,
+\method{rpart}{pca}(tree, pts = TRUE, plt.allx = TRUE, speclab = TRUE,
     specvecs = TRUE, wgt.ave = FALSE, add.tree = TRUE,  
     cv1 = 1, cv2 = 2, interact = FALSE, \dots) 
 }
@@ -35,8 +35,11 @@ If \code{TRUE} use weighted averages of responses not vectors.
 \item{add.tree}{
 If \code{TRUE} add the tree structure to the plot.
 }
-\item{cv1, cv2}{
-Defines which principal components to plot -- but see \code{interact} .
+\item{cv1}{
+Defines the principal component to plot horizontally -- but see \code{interact}.
+}
+\item{cv2}{
+Defines the principal component to plot vertically -- but see \code{interact}.
 }
 \item{interact}{
 If \code{TRUE} the plot can be viewed in dimensions by left-clicking to 
