@@ -10,7 +10,7 @@
 }
 \usage{
 cmds.diss(data, k = ncol(data), x.use = FALSE, method = "man", 
-    zero.chk = TRUE, plt = TRUE, plot.subset = FALSE, plot.subn = 5) 
+    zero.chk = TRUE, plt = FALSE, plot.subset = FALSE, plot.subn = 5) 
 }
 
 \arguments{

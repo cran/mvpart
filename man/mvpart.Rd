@@ -8,7 +8,7 @@ Wrapper function for fitting and plotting \code{rpart} models
 }
 
 \usage{
-mvpart(form, data, minauto = FALSE, size, xv = c("1se", "min", "pick", "none"), 
+mvpart(form, data, minauto = TRUE, size, xv = c("1se", "min", "pick", "none"), 
     xval = 10, xvmult = 0, xvse = 1, snip = FALSE,
     plot.add = TRUE, text.add = TRUE, digits = 3, margin = 0, uniform = FALSE,
     which = 1, pretty = TRUE, use.n = TRUE, 

@@ -2525,7 +2525,7 @@ xpred.rpart <- function(fit, xval=10, cp)
 
 .First.lib <- function(lib, pkg) {
 	library.dynam("mvpart", pkg, lib)
-	cat(" MVPart package loaded: extends Rpart to include\n") 
+	cat(" mvpart package loaded: extends rpart to include\n") 
 	cat(" multivariate and distance-based partitioning\n\n")
 }
 

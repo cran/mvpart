@@ -1,8 +1,8 @@
 The package MVPART is a modification of RPART --
- -- authors: Terry M Therneau and Beth Atkinson <atkinson@mayo.edu>, and
+ -- authors of original: Terry M Therneau and Beth Atkinson <atkinson@mayo.edu>, and
  R port of rpart Brian Ripley <ripley@stats.ox.ac.uk>. 
 
-Modifications of RPART by Glenn De'ath <g.death@aims.gov.au>.
+Modifications of RPART to MVPART by Glenn De'ath <g.death@aims.gov.au>.
   
 MVPART includes partitioning based on (1) multivariate numeric responses and 
 (2) dissimilarity matrices.

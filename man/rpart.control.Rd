@@ -7,7 +7,7 @@
 Various parameters that control aspects of the \code{rpart} fit. 
 }
 \usage{
-rpart.control(minsplit=20, minbucket=round(minsplit/3), cp=0.01, 
+rpart.control(minsplit=5, minbucket=round(minsplit/3), cp=0.01, 
               maxcompete=4, maxsurrogate=5, usesurrogate=2, xval=10,
 	      surrogatestyle=0, maxdepth=30, \dots)
 }
