@@ -1,0 +1,28 @@
+The package MVPART is a modification of RPART --
+ -- authors: Terry M Therneau and Beth Atkinson <atkinson@mayo.edu>, and
+ R port of rpart Brian Ripley <ripley@stats.ox.ac.uk>. 
+
+Modifications of RPART by Glenn De'ath <g.death@aims.gov.au>.
+  
+MVPART includes partitioning based on (1) multivariate numeric responses and 
+(2) dissimilarity matrices.
+
+It was not possible to simply build a separate packge which required RPART due
+to the modifications to the RPART C-code necessary to include the 2 new 
+partitioning methods.
+
+As few changes as possible have been made to RPART.
+
+In addition to the changes in the C-code, the following changes and additions in 
+R-functions have been made.
+
+(1) A wrapper function for rpart called mvpart supports selection of trees by x-validation,
+	interactive display, printing of results etc.
+	
+(2) Some multivariate methods to deal with representation and interpretation of multivariate
+	partitioning objects have been added. These include PCA plots and tree-cluster comparisons.
+	
+(3) Methods for calculating increased forms of dissimilarities and for scaling matrices 
+	have been added. These are designed in particluar for community ecology.
+	
+(3) text.rpart has been modified to include graphical annotation of nodes.
