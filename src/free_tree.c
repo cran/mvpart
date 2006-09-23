@@ -1,4 +1,4 @@
-/* SCCS @(#)free_tree.c	1.2 02/08/98 */
+/* SCCS @(#)free_tree.c 1.2 02/08/98 */
 /*
 ** free up all of the memory associated with a tree
 */
@@ -15,14 +15,14 @@ void free_tree(struct node *node,  int freenode)
     if (node->leftson  !=0) free_tree(node->leftson,  1);
 
     for (s1=node->surrogate; s1!=0; ){
-	s2 = s1;
-	s1 = s1->nextsplit;
-	Free(s2);
-	}
+    s2 = s1;
+    s1 = s1->nextsplit;
+    Free(s2);
+    }
     for (s1=node->primary; s1!=0; ){
-	s2 = s1;
-	s1 = s1->nextsplit;
-	Free(s2);
-	}
+    s2 = s1;
+    s1 = s1->nextsplit;
+    Free(s2);
+    }
     if (freenode==1) Free(node);
     }

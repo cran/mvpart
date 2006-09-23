@@ -1,4 +1,4 @@
-/* SCCS @(#)node.h	1.3 12/13/99 */
+/* SCCS @(#)node.h  1.3 12/13/99 */
 /*
 ** definition of a node in the tree
 */
@@ -66,7 +66,7 @@ struct cptable {
 **             and all earlier surrogates but not missing on this one.  (For
 **             all primaries but the first, the number is theoretical).
 **
-**	adj:  Let "maj" be the %agreement for going with the majority,
+**  adj:  Let "maj" be the %agreement for going with the majority,
 **                and "agree" the %agreement for this surrogate.  The
 **                adjusted value is (agree - maj)/(1-maj); the amount of
 **                the potential improvement actually realized.  The denominator
@@ -99,5 +99,5 @@ struct cptable {
 **
 **      lastsurrogate: Which direction to send obs for which the primary and
 **              all the surrogates are missing.  (The child with the greatest
-**		sum of weights).
+**      sum of weights).
 */

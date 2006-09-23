@@ -9,22 +9,21 @@
   
 }
 \usage{
-cmds.diss(data, k = ncol(data), x.use = FALSE, method = "man", 
-    zero.chk = TRUE, plt = FALSE, plot.subset = FALSE, plot.subn = 5) 
+cmds.diss(data, k = ncol(data), x.use = FALSE, zero.chk = TRUE, 
+            plt = FALSE, plot.subset = FALSE, plot.subn = 5, ...) 
 }
 
 \arguments{
   \item{data}{ Data matrix}
   \item{k}{ Number of vectors to be returned}
   \item{x.use}{ Use extended dissimilarity?}
-  \item{method}{ Dissimilarity index }
   \item{zero.chk}{ Check for zero row sums -- if zero ignore these rows according to method}
   \item{plt}{ Plot the relationship between the dissimilarities and the distances calculated 
   from the scaled output vectors. }
   \item{plot.subset}{ Plot a subset of the points -- useful for large data sets. }
   \item{plot.subn}{ Controls how many points are plotted when \code{plot.subset}=TRUE.
-  The number of points plotted is 750 + N * plot.subn where N = number of rows in \code{data}.
-}
+  The number of points plotted is 750 + N * plot.subn where N = number of rows in \code{data}.}
+  \item{\dots}{ arguments passed to either \code{xdiss} or \code{gdist}}
 }
 
 \details{

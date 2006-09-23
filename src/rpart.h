@@ -1,4 +1,4 @@
-/* SCCS @(#)rpart.h	1.10 06/06/01   */
+/* SCCS @(#)rpart.h 1.10 06/06/01   */
 /*
 ** commom variables for the rpart routine
 */
@@ -6,8 +6,8 @@
 #undef error
 #ifndef FLOAT
 #define FLOAT double    /*so I can easily change 'x' to double at some later
-			 date, with all the consequences thereof.  Also see
-		         node.h  */
+             date, with all the consequences thereof.  Also see
+                 node.h  */
 #endif
 #define LEFT  (-1)     /*used for the variable "extra" in nodes */
 #define RIGHT  1
@@ -34,7 +34,7 @@ EXTERN struct {
     double *lwt;
     double *rwt;            /*scratch double vectors, of length ncat */
     double *vcost;          /* variable costs */
-    Sint    *numcat;        /* variable type: 0=cont, 1+  =#categories */
+    Sint   *numcat;        /* variable type: 0=cont, 1+  =#categories */
     Sint   **sorts;             /* allocated on the fly */
     int    n;              /* total number of subjects  */
     int    num_y;          /* number of y variables */
@@ -54,6 +54,7 @@ EXTERN struct {
     int    *csplit;
     int    *left;
     int    *right;
+    int    dissim;
     }  rp;
 
 EXTERN struct cptable *cptable_tail;

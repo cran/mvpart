@@ -7,7 +7,8 @@ methods for community ecologists.
 }
 
 \usage{
-scaler(x, col = NULL, row=NULL)
+scaler(x, col = c("mean1", "max1", "min0", "ssq1", "range01", "zsc", "pa", "rank")[2],
+    row = c("mean1", "max1", "min0", "ssq1", "range01", "zsc", "pa", "rank")[1])
 }
 \arguments{
   \item{x}{ Data matrix.}

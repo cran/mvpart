@@ -15,7 +15,7 @@ mvpart(form, data, minauto = TRUE, size, xv = c("1se", "min",
     all.leaves = FALSE, bars = TRUE, legend, bord = FALSE, 
     xadj = 1, yadj = 1, prn = FALSE, branch = 1, rsq = FALSE, 
     big.pts = FALSE, pca = FALSE, interact.pca = FALSE, 
-    wgt.ave.pca = FALSE, \dots) 
+    wgt.ave.pca = FALSE, keep.y = TRUE, \dots) 
 }
 
 \arguments{
@@ -110,6 +110,9 @@ If \code{TRUE} runs interactive PCA. See \code{rpart.pca}.
 }
 \item{wgt.ave.pca}{
 If \code{TRUE} plot weighted averages acorss sites for species.
+}
+\item{keep.y}{
+If \code{TRUE} y values are returned.
 }
 \item{\dots}{
 \dots other arguments passed to \code{rpart}.

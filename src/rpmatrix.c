@@ -1,4 +1,4 @@
-/* SCCS @(#)rpmatrix.c	1.7 06/06/01 */
+/* SCCS @(#)rpmatrix.c  1.7 06/06/01 */
 /*
 **  For S's usage, convert the linked list data into matrix form
 */
@@ -7,9 +7,9 @@
 #include "rpartproto.h"
 
 void rpmatrix(struct node *me,  Sint *nodecount,   Sint *splitcount, 
-	      Sint *catcount,   Sint *numcat,      double **dsplit,
-	      Sint **isplit,    Sint **csplit,     double **dnode, 
-	      Sint **inode,     int id)
+          Sint *catcount,   Sint *numcat,      double **dsplit,
+          Sint **isplit,    Sint **csplit,     double **dnode, 
+          Sint **inode,     int id)
     {
     /*
     ** dsplit  0: improvement
@@ -38,8 +38,8 @@ void rpmatrix(struct node *me,  Sint *nodecount,   Sint *splitcount,
     static double cp_scale;
 
     if (id==1) {
-	cp_scale = 1/ me->risk;
-	}
+    cp_scale = 1/ me->risk;
+    }
     scnt = *splitcount;
     ncnt = *nodecount;
     ccnt = *catcount;
@@ -53,68 +53,68 @@ void rpmatrix(struct node *me,  Sint *nodecount,   Sint *splitcount,
     inode[4][ncnt] = me->num_obs;
 
     if (me->complexity <=rp.alpha || me->leftson==0) { /*no kids */
-	inode[1][ncnt] = 0;
-	inode[2][ncnt] = 0;
-	inode[3][ncnt] = 0;
-	inode[5][ncnt] = me->num_obs;
-	*nodecount = ncnt+1;
-	}
+    inode[1][ncnt] = 0;
+    inode[2][ncnt] = 0;
+    inode[3][ncnt] = 0;
+    inode[5][ncnt] = me->num_obs;
+    *nodecount = ncnt+1;
+    }
     else {
-	inode[1][ncnt] = scnt +1;    /*S has 1 based, not 0 based subscripts */
+    inode[1][ncnt] = scnt +1;    /*S has 1 based, not 0 based subscripts */
 
-	i=0;
-	for (spl = me->primary; spl!=0; spl = spl->nextsplit) {
-	    i++;
-	    j = spl->var_num;
-	    dsplit[0][scnt] = spl->improve;
-	    if (numcat[j] ==0) {
-		dsplit[1][scnt] = spl->spoint;
-		isplit[2][scnt] = spl->csplit[0];
-		}
-	    else {
-		dsplit[1][scnt] = ccnt+1;
-		isplit[2][scnt] = numcat[j];
-		for (k=0; k<numcat[j]; k++) csplit[k][ccnt] = spl->csplit[k];
-		ccnt++;
-		}
-	    isplit[0][scnt] = j +1;      /* use "1" based subscripts */
-	    isplit[1][scnt] = spl->count;
-	    scnt++;
-	    }
-	inode[2][ncnt] = i;
+    i=0;
+    for (spl = me->primary; spl!=0; spl = spl->nextsplit) {
+        i++;
+        j = spl->var_num;
+        dsplit[0][scnt] = spl->improve;
+        if (numcat[j] ==0) {
+        dsplit[1][scnt] = spl->spoint;
+        isplit[2][scnt] = spl->csplit[0];
+        }
+        else {
+        dsplit[1][scnt] = ccnt+1;
+        isplit[2][scnt] = numcat[j];
+        for (k=0; k<numcat[j]; k++) csplit[k][ccnt] = spl->csplit[k];
+        ccnt++;
+        }
+        isplit[0][scnt] = j +1;      /* use "1" based subscripts */
+        isplit[1][scnt] = spl->count;
+        scnt++;
+        }
+    inode[2][ncnt] = i;
 
-	i=0;
-	for (spl=me->surrogate; spl!=0; spl = spl->nextsplit) {
-	    i++;
-	    j = spl->var_num;
-	    dsplit[0][scnt] = spl->improve;
-	    dsplit[2][scnt] = spl->adj;
-	    if (numcat[j] ==0) {
-		dsplit[1][scnt] = spl->spoint;
-		isplit[2][scnt] = spl->csplit[0];
-		}
-	    else {
-		dsplit[1][scnt] = ccnt+1;
-		isplit[2][scnt] = numcat[j];
-		for (k=0; k<numcat[j]; k++) csplit[k][ccnt] = spl->csplit[k];
-		ccnt++;
-		}
-	    isplit[0][scnt] = j +1;
-	    isplit[1][scnt] = spl->count;
-	    scnt++;
-	    }
-	inode[3][ncnt] = i;
-	inode[5][ncnt] = me->num_obs -
-			   ((me->leftson)->num_obs + (me->rightson)->num_obs);
+    i=0;
+    for (spl=me->surrogate; spl!=0; spl = spl->nextsplit) {
+        i++;
+        j = spl->var_num;
+        dsplit[0][scnt] = spl->improve;
+        dsplit[2][scnt] = spl->adj;
+        if (numcat[j] ==0) {
+        dsplit[1][scnt] = spl->spoint;
+        isplit[2][scnt] = spl->csplit[0];
+        }
+        else {
+        dsplit[1][scnt] = ccnt+1;
+        isplit[2][scnt] = numcat[j];
+        for (k=0; k<numcat[j]; k++) csplit[k][ccnt] = spl->csplit[k];
+        ccnt++;
+        }
+        isplit[0][scnt] = j +1;
+        isplit[1][scnt] = spl->count;
+        scnt++;
+        }
+    inode[3][ncnt] = i;
+    inode[5][ncnt] = me->num_obs -
+               ((me->leftson)->num_obs + (me->rightson)->num_obs);
 
-	ncnt++;
-	*nodecount = ncnt;
-	*splitcount= scnt;
-	*catcount  = ccnt;
+    ncnt++;
+    *nodecount = ncnt;
+    *splitcount= scnt;
+    *catcount  = ccnt;
 
-	rpmatrix(me->leftson, nodecount, splitcount, catcount, numcat,
-		    dsplit, isplit, csplit, dnode, inode, 2*id);
-	rpmatrix(me->rightson,nodecount, splitcount, catcount, numcat,
-		    dsplit, isplit, csplit, dnode, inode, 2*id +1);
-	}
+    rpmatrix(me->leftson, nodecount, splitcount, catcount, numcat,
+            dsplit, isplit, csplit, dnode, inode, 2*id);
+    rpmatrix(me->rightson,nodecount, splitcount, catcount, numcat,
+            dsplit, isplit, csplit, dnode, inode, 2*id +1);
+    }
     }

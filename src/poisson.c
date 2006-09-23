@@ -1,4 +1,4 @@
-/* SCCS @(#)poisson.c	1.6 06/06/01 */
+/* SCCS @(#)poisson.c   1.6 06/06/01 */
 /*
 **  The functions for poisson based regression
 */
@@ -7,54 +7,54 @@
 #include "rpartS.h"
 
 static double exp_alpha,
-	      exp_beta;
+          exp_beta;
 static double *death,
               *wtime, 
-	      *rate;
+          *rate;
 static int    *countn,
-	      *order,
-	      *order2;
+          *order,
+          *order2;
 static int    which_pred;
 /*
 ** initialize the necessary common variables for poisson fits
 */
 int poissoninit(int n,         double *y[], int maxcat, char **error, 
-		double *param, int *size,   int who,    double *wt)
+        double *param, int *size,   int who,    double *wt)
     {
     int i;
     double event, time;
 
     /*allocate memory for scratch */
     if (who==1 && maxcat>0) {
-	death = (double *)ALLOC(3*maxcat, sizeof(double));
-	rate  = death + maxcat;
-	wtime = rate + maxcat;
-	order = (int *) ALLOC(3*maxcat, sizeof(int));
-	order2= order +maxcat;
-	countn= order2 + maxcat;
-	}
+    death = (double *)ALLOC(3*maxcat, sizeof(double));
+    rate  = death + maxcat;
+    wtime = rate + maxcat;
+    order = (int *) ALLOC(3*maxcat, sizeof(int));
+    order2= order +maxcat;
+    countn= order2 + maxcat;
+    }
 
     /* check data */
     if (who==1) {
-	for (i=0; i<n; i++) {
-	    if (y[i][0] <=0) {
-		*error =  "Invalid time point";
-		return(1);
-		}
-	    if (y[i][1] < 0) {
-		*error = "Invalid event count";
-		return(1);
-		}
-	    }
-	}
+    for (i=0; i<n; i++) {
+        if (y[i][0] <=0) {
+        *error =  "Invalid time point";
+        return(1);
+        }
+        if (y[i][1] < 0) {
+        *error = "Invalid event count";
+        return(1);
+        }
+        }
+    }
 
     /* compute the overall hazard rate */
     event=0;
     time =0;
     for (i=0; i<n; i++) {
-	event += y[i][1] * wt[i];
-	time  += y[i][0] * wt[i];
-	}
+    event += y[i][1] * wt[i];
+    time  += y[i][0] * wt[i];
+    }
 
     /*
     ** Param[0] will contain the desired CV.  If is is <=0, no shrinking
@@ -62,21 +62,21 @@ int poissoninit(int n,         double *y[], int maxcat, char **error,
     **   the gamma prior has the correct mean.
     */
     if (param[0] <=0) {
-	exp_alpha =0;
-	exp_beta  =0;
-	}
+    exp_alpha =0;
+    exp_beta  =0;
+    }
     else {
-	exp_alpha =  1/(param[0]*param[0]);
-	exp_beta =  exp_alpha /(event/time);
-	}
+    exp_alpha =  1/(param[0]*param[0]);
+    exp_beta =  exp_alpha /(event/time);
+    }
     /*
     ** Param[1] contains the xval rule:  1=deviance, 2=square root
     */
     which_pred = param[1];
     if (param[1] !=1 && param[1] !=2) {
-	*error = "Invalid error rule";
-	return(1);
-	}
+    *error = "Invalid error rule";
+    return(1);
+    }
 
     *size =2;
     return(0);
@@ -89,21 +89,21 @@ double poissonpred(double *y, double *lambda) {
     double temp, dev;
 
     if (which_pred==1) {
-	temp = y[1];
-	dev  = temp - *lambda*y[0];
-	if (temp>0)
-	    dev += temp * log(*lambda * y[0] / temp);
-	
-	return(-2*dev);
-	}
+    temp = y[1];
+    dev  = temp - *lambda*y[0];
+    if (temp>0)
+        dev += temp * log(*lambda * y[0] / temp);
+    
+    return(-2*dev);
+    }
     else {
-	/*
-	** A version based on square roots, which is the
-	**   variance stabilizing transform
-	*/
-	temp = sqrt(y[1]) - sqrt(*lambda * y[0]); /*sqrt(obs) - sqrt(exp) */
-	return(temp*temp);
-	}	
+    /*
+    ** A version based on square roots, which is the
+    **   variance stabilizing transform
+    */
+    temp = sqrt(y[1]) - sqrt(*lambda * y[0]); /*sqrt(obs) - sqrt(exp) */
+    return(temp*temp);
+    }   
     }
 
 /*
@@ -126,18 +126,18 @@ void poissondev(int n, double **y, double *value, double *risk, double *wt)
     ** first get the overall estimate of lambda
     */
     for (i=0; i<n; i++) {
-	death += y[i][1] * wt[i];
-	time  += y[i][0] * wt[i];
-	}
+    death += y[i][1] * wt[i];
+    time  += y[i][0] * wt[i];
+    }
     lambda = (death + exp_alpha) / (time + exp_beta);
 
     dev =0;
     for (i=0; i<n; i++) {
-	temp = y[i][1];
-	dev -= (lambda*y[i][0] - temp) * wt[i];
-	if (temp>0)
-	    dev += (temp * log(lambda * y[i][0] / temp)) * wt[i];
-	}
+    temp = y[i][1];
+    dev -= (lambda*y[i][0] - temp) * wt[i];
+    if (temp>0)
+        dev += (temp * log(lambda * y[i][0] / temp)) * wt[i];
+    }
 
     value[0] = lambda;
     value[1] = death;
@@ -157,8 +157,8 @@ void poissondev(int n, double **y, double *value, double *risk, double *wt)
 **   d_t = total, and lambda_l etc are the estimated response rates
 */
 void poisson(int n,       double **y,      FLOAT *x,     int nclass, 
-	     int edge,    double *improve, FLOAT *split,
-	     int *csplit, double my_risk,  double *wt)
+         int edge,    double *improve, FLOAT *split,
+         int *csplit, double my_risk,  double *wt)
     {
     int i,j;
     int    left_n, right_n;
@@ -178,18 +178,18 @@ void poisson(int n,       double **y,      FLOAT *x,     int nclass,
     right_time =0;
     right_n =n ;
     for (i=0; i<n; i++) {
-	right_d += y[i][1] * wt[i];
-	right_time += y[i][0] * wt[i];
-	}
+    right_d += y[i][1] * wt[i];
+    right_time += y[i][0] * wt[i];
+    }
 
     /*
     ** Compute the overall lambda and dev
     */
     lambda2 = right_d/right_time;
     if (lambda2 ==0) {
-	*improve=0;         /*no deaths to split! */
-	return;
-	}
+    *improve=0;         /*no deaths to split! */
+    return;
+    }
     dev = right_d*log(lambda2);
 
     /*
@@ -202,46 +202,46 @@ void poisson(int n,       double **y,      FLOAT *x,     int nclass,
     where = -1;
     best    = dev;
     for (i=0; i < n-edge; i++) {
-	left_d  += y[i][1] * wt[i];
-	right_d -= y[i][1] * wt[i];
-	left_time  +=y[i][0]*wt[i];
-	right_time -=y[i][0]*wt[i];
+    left_d  += y[i][1] * wt[i];
+    right_d -= y[i][1] * wt[i];
+    left_time  +=y[i][0]*wt[i];
+    right_time -=y[i][0]*wt[i];
 
-	if (x[i+1] !=x[i] &&  (1+i)>=edge) {
-	    lambda1 = left_d / left_time;
-	    lambda2 = right_d/ right_time;
-	    temp = 0;
-	    if (lambda1 >0) temp += left_d * log(lambda1);
-	    if (lambda2 >0) temp += right_d* log(lambda2);
-	    if (temp > best) {
-		best=temp;
-		where =i;
-		if (lambda1  < lambda2) direction = LEFT;
-				else    direction = RIGHT;
-		}
-	    }
-	}
+    if (x[i+1] !=x[i] &&  (1+i)>=edge) {
+        lambda1 = left_d / left_time;
+        lambda2 = right_d/ right_time;
+        temp = 0;
+        if (lambda1 >0) temp += left_d * log(lambda1);
+        if (lambda2 >0) temp += right_d* log(lambda2);
+        if (temp > best) {
+        best=temp;
+        where =i;
+        if (lambda1  < lambda2) direction = LEFT;
+                else    direction = RIGHT;
+        }
+        }
+    }
 
     *improve =  -2*(dev - best) ;
     if (where >= 0 ) {   /* found something */
-	csplit[0] = direction;
-	*split = (x[where] + x[where+1]) /2;
-	}
+    csplit[0] = direction;
+    *split = (x[where] + x[where+1]) /2;
+    }
     return;
 
 categorical:;
     for (i=0; i<nclass; i++) {
-	wtime[i] =0;
-	death[i] =0;
-	countn[i]=0;
-	}
+    wtime[i] =0;
+    death[i] =0;
+    countn[i]=0;
+    }
 
     for (i=0; i<n; i++) {
-	j = x[i] -1;
-	countn[j]++;		        /* number per group */
-	death[j]+= y[i][1] * wt[i];
-	wtime[j] += y[i][0] * wt[i];     /*sum of time */
-	}
+    j = x[i] -1;
+    countn[j]++;                /* number per group */
+    death[j]+= y[i][1] * wt[i];
+    wtime[j] += y[i][0] * wt[i];     /*sum of time */
+    }
 
     /*
     ** Rank the rates  - each is scored as the number of others that it
@@ -249,24 +249,24 @@ categorical:;
     */
     ncat=0;   /* may be less than nclass if not all categories are present */
     for (i=0; i<nclass; i++) {
-	order[i]=0;
-	if (countn[i]>0) {
-	    ncat++;
-	    rate[i] = death[i]/ wtime[i];
-	    for (j=i-1; j>=0; j--) {
-		if (countn[j] >0) {
-		    if (rate[i]>rate[j])  order[j]++;
-			else              order[i]++;
-		    }
-		}
-	    }
-	}
+    order[i]=0;
+    if (countn[i]>0) {
+        ncat++;
+        rate[i] = death[i]/ wtime[i];
+        for (j=i-1; j>=0; j--) {
+        if (countn[j] >0) {
+            if (rate[i]>rate[j])  order[j]++;
+            else              order[i]++;
+            }
+        }
+        }
+    }
     /*
     ** order2 will point to the largest, second largest, etc
     */
     for (i=0; i<nclass; i++) {
-	if (countn[i]>0) order2[order[i]]=i;
-	}
+    if (countn[i]>0) order2[order[i]]=i;
+    }
 
     /*
     ** Now find the split that we want
@@ -278,27 +278,27 @@ categorical:;
     best =dev;
     where =0;
     for (i=0; i<ncat-1; i++){
-	j = order2[i];
-	left_n += countn[j];
-	right_n-= countn[j];
-	left_time += wtime[j];
-	right_time-= wtime[j];
-	left_d  += death[j];
-	right_d -= death[j];
-	if (left_n>=edge  &&  right_n>=edge) {
-	    lambda1 = left_d / left_time;
-	    lambda2 = right_d/ right_time;
-	    temp = 0;
-	    if (lambda1 >0) temp += left_d * log(lambda1);
-	    if (lambda2 >0) temp += right_d* log(lambda2);
-	    if (temp > best) {
-		best=temp;
-		where =i;
-		if (lambda1  < lambda2) direction = LEFT;
-				else    direction = RIGHT;
-		}
-	    }
-	}
+    j = order2[i];
+    left_n += countn[j];
+    right_n-= countn[j];
+    left_time += wtime[j];
+    right_time-= wtime[j];
+    left_d  += death[j];
+    right_d -= death[j];
+    if (left_n>=edge  &&  right_n>=edge) {
+        lambda1 = left_d / left_time;
+        lambda2 = right_d/ right_time;
+        temp = 0;
+        if (lambda1 >0) temp += left_d * log(lambda1);
+        if (lambda2 >0) temp += right_d* log(lambda2);
+        if (temp > best) {
+        best=temp;
+        where =i;
+        if (lambda1  < lambda2) direction = LEFT;
+                else    direction = RIGHT;
+        }
+        }
+    }
 
     *improve =  -2*(dev - best) ;
 

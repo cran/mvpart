@@ -9,7 +9,7 @@ Fit a \code{rpart} model
 }
 \usage{
 rpart(formula, data=NULL, weights, subset, na.action=na.rpart, method,
-      model=FALSE, x=FALSE, y=TRUE, parms, control, cost, \dots)
+      dissim, model=FALSE, x=FALSE, y=TRUE, parms, control, cost, \dots)
 }
 \arguments{
 \item{formula}{
@@ -44,9 +44,14 @@ For method=\code{"dist"} the response must be a square symmetric distance matrix
 returned by \code{\link[mvpart]{gdist}} or \code{\link[mvpart]{xdiss}}. Weights and 
 cross-validation are currently not implemented for method=\code{"dist"}. 
 
-
 Alternatively, \code{method} can be a list of functions named
 \code{init}, \code{split} and \code{eval}.
+}
+\item{dissim}{
+used when method=\code{"anova"} or method=\code{"mrt"}. Dissimilarity types are either 
+\code{"euc"} for Euclidean (sums of squares about the mean) or \code{"man"} for Manhattan
+(sums of absolute deviations about the mean. The latter is experimental and has proved useful 
+for ecological data. 
 }
 \item{model}{
 keep a copy of the model frame in the result. 

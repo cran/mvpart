@@ -6,20 +6,28 @@
   tree partitioning and unconstrained clustering.
   The results are plotted and returned invisibly.
 }
+
 \usage{
-trclcomp(x, method = "com")
+trclcomp(x, method = "com", km = TRUE, mrt = TRUE)
 }
 
 \arguments{
   \item{x}{ Rpart object with method "mrt" -- see \code{\link{rpart}}}
   \item{method}{ The clustering method for the unconstrained clustering
   -- see \code{\link[mva]{hclust}}}.
+
+\item{km}{ If \code{TRUE} a K-Means clustering is compared with the multivariate tree partitioning.
+}
+
+\item{mrt}{ If \code{TRUE} an additional K-Means clustering with a starting configuration based on
+ the multivariate tree partitioning is generated.
+}
 }
 
 \details{
-  The within-group variation for groups formed by tree partitioning and 
-  unconstrained clustering are compared for all sizes of the hierarchy of tree
-  partitions,   
+  The within-group variation for groups formed by multivariate tree partitioning and 
+  unconstrained clusterings are compared for all sizes of the hierarchy of tree
+  partitions.   
 }
 
 \value{

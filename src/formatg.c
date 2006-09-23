@@ -1,4 +1,4 @@
-/*  SCCS @(#)formatg.c	1.2 06/06/01 */
+/*  SCCS @(#)formatg.c  1.2 06/06/01 */
 /*
 ** Write a bunch of numbers in a desired C format, (almost always %g)
 */
@@ -16,19 +16,19 @@ void formatg( Sint *n, double *x, char **format, char **out)
 #endif
 
     for (i=0; i< *n; i++) {
-	sprintf(out[i], format[i], x[i]);
+    sprintf(out[i], format[i], x[i]);
 #ifdef WIN32
-	/* change e+/-00n to e+/-0n etc */
-	p = out[i];
-	len = strlen(p);
-	if (tolower(p[len-5]) == 'e' &&
-	    (p[len-4] == '+' || p[len-4] == '-') &&
-	    p[len-3] == '0' &&
-	    isdigit(p[len-2]) && isdigit(p[len-1])) {
-	    p[len-3] = p[len-2];
-	    p[len-2] = p[len-1];
-	    p[len-1] = '\0';
-	}
+    /* change e+/-00n to e+/-0n etc */
+    p = out[i];
+    len = strlen(p);
+    if (tolower(p[len-5]) == 'e' &&
+        (p[len-4] == '+' || p[len-4] == '-') &&
+        p[len-3] == '0' &&
+        isdigit(p[len-2]) && isdigit(p[len-1])) {
+        p[len-3] = p[len-2];
+        p[len-2] = p[len-1];
+        p[len-1] = '\0';
+    }
 #endif
     }
 }

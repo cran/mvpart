@@ -1,4 +1,4 @@
-/* SCCS @(#)rpcountup.c	1.5 06/06/01 */
+/* SCCS @(#)rpcountup.c 1.5 06/06/01 */
 /*
 ** count up the number of nodes and splits in the final result
 **
@@ -17,25 +17,25 @@ void rpcountup(struct node *me, Sint *nnode, Sint *nsplit, int *ncat)
     struct split *ss;
 
     if (me->complexity <=rp.alpha || me->leftson==0) { /*no kids */
-	*nnode=1;
-	*nsplit=0;
-	*ncat =0;
-	}
+    *nnode=1;
+    *nsplit=0;
+    *ncat =0;
+    }
     else {
-	i=0; j=0; k=0;
-	for (ss= me->primary;   ss!=0; ss = ss->nextsplit) {
-	    i++;
-	    if (rp.numcat[ss->var_num] >0) k++;
-	    }
-	for (ss= me->surrogate; ss!=0; ss = ss->nextsplit) {
-	    j++;
-	    if (rp.numcat[ss->var_num] >0) k++;
-	    }
+    i=0; j=0; k=0;
+    for (ss= me->primary;   ss!=0; ss = ss->nextsplit) {
+        i++;
+        if (rp.numcat[ss->var_num] >0) k++;
+        }
+    for (ss= me->surrogate; ss!=0; ss = ss->nextsplit) {
+        j++;
+        if (rp.numcat[ss->var_num] >0) k++;
+        }
 
-	rpcountup(me->leftson, nnode,  nsplit,  ncat);
-	rpcountup(me->rightson,&node2, &split2, &cat2);
-	*nnode += 1 + node2;
-	*nsplit += i + j + split2;
-	*ncat   += k + cat2;
-	}
+    rpcountup(me->leftson, nnode,  nsplit,  ncat);
+    rpcountup(me->rightson,&node2, &split2, &cat2);
+    *nnode += 1 + node2;
+    *nsplit += i + j + split2;
+    *ncat   += k + cat2;
+    }
     }

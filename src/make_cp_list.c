@@ -1,4 +1,4 @@
-/* SCCS @(#)make_cp_list.c	1.4 07/26/00 */
+/* SCCS @(#)make_cp_list.c  1.4 07/26/00 */
 /*
 ** This routine creates the list of unique complexity parameters.
 ** The list is maintained in sorted order.  If two parameters are within
@@ -41,30 +41,30 @@ void make_cp_list(struct node *me, double parent, struct cptable *cptable_head)
     me_cp = me->complexity;
     if (me_cp < rp.alpha) me_cp = rp.alpha;    /*table should go no lower */
     if (me->leftson != 0) {
-	 make_cp_list(me->leftson, me_cp, cptable_head);
-	 make_cp_list(me->rightson,me_cp, cptable_head);
-	 }
+     make_cp_list(me->leftson, me_cp, cptable_head);
+     make_cp_list(me->rightson,me_cp, cptable_head);
+     }
 
     if (me_cp < parent) {  /*if not, then it can't be unique */
-	for (cplist= cptable_head; cplist !=0; cplist= cplist->forward) {
-	    /* am I tied? */
-	    if (me_cp == cplist->cp) return;  /* exact ties */
+    for (cplist= cptable_head; cplist !=0; cplist= cplist->forward) {
+        /* am I tied? */
+        if (me_cp == cplist->cp) return;  /* exact ties */
 
-	    if (me_cp > cplist->cp) break;
-	    cptemp = cplist;
-	    }
+        if (me_cp > cplist->cp) break;
+        cptemp = cplist;
+        }
 
-	/* insert new stuff after cptemp */
-	cplist = (struct cptable *) CALLOC(1, sizeof(struct cptable));
-	cplist->cp = me_cp;
-	cplist->xrisk = 0;
-	cplist->xstd  =0;
-	cplist->back = cptemp;
-	cplist->forward = cptemp->forward;
-	if (cptemp->forward!=0) (cptemp->forward)->back = cplist;
-	  else  cptable_tail = cplist;
-	cptemp->forward = cplist;
-	rp.num_unique_cp++;
-	return;
-	}
+    /* insert new stuff after cptemp */
+    cplist = (struct cptable *) CALLOC(1, sizeof(struct cptable));
+    cplist->cp = me_cp;
+    cplist->xrisk = 0;
+    cplist->xstd  =0;
+    cplist->back = cptemp;
+    cplist->forward = cptemp->forward;
+    if (cptemp->forward!=0) (cptemp->forward)->back = cplist;
+      else  cptable_tail = cplist;
+    cptemp->forward = cplist;
+    rp.num_unique_cp++;
+    return;
+    }
     }

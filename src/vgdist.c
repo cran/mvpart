@@ -39,8 +39,8 @@ double g_manhattan(double *x, int nr, int nc, int i1, int i2)
     if (R_FINITE(x[i1]) && R_FINITE(x[i2])) {
       dist += fabs( x[i1] - x[i2] );
       count++;
-	}
-	i1 += nr;
+    }
+    i1 += nr;
     i2 += nr;
   }
   if (count == 0) dist = NA_REAL;
@@ -83,7 +83,7 @@ double g_euclidean(double *x, int nr, int nc, int i1, int i2)
       dev = x[i1] - x[i2];
       dist += dev*dev;
       count++;
-	}
+    }
     i1 += nr;
     i2 += nr;
   }
@@ -101,16 +101,16 @@ double g_canberra(double *x, int nr, int nc, int i1, int i2)
   for (j=0; j<nc; j++) {
     if (R_FINITE(x[i1]) && R_FINITE(x[i2])) {
       if (x[i1] != 0 || x[i2] != 0) {
-	count++;
-	denom = x[i1] + x[i2];
-	if (denom > 0.0) {
-	  numer = fabs(x[i1] - x[i2]);
-	  dist += numer/denom;
-	}
-	else {
-	  dist += R_PosInf;
-	}
-	}
+    count++;
+    denom = x[i1] + x[i2];
+    if (denom > 0.0) {
+      numer = fabs(x[i1] - x[i2]);
+      dist += numer/denom;
+    }
+    else {
+      dist += R_PosInf;
+    }
+    }
     }
     i1 += nr;
     i2 += nr;
@@ -133,8 +133,8 @@ double g_bray(double *x, int nr, int nc, int i1, int i2)
       dist += fabs(x[i1] - x[i2]);
       total += x[i1] + x[i2];
       count++;
-	}
-	i1 += nr;
+    }
+    i1 += nr;
     i2 += nr;
   }
   if (count == 0) dist = NA_REAL;
@@ -157,7 +157,7 @@ double g_kulczynski(double *x, int nr, int nc, int i1, int i2)
       t1 += x[i1];
       t2 += x[i2];
       count++;
-	}
+    }
     i1 += nr;
     i2 += nr;
   }
@@ -175,13 +175,13 @@ double g_maximum(double *x, int nr, int nc, int i1, int i2)
     dist = -10^10;
     for(j = 0 ; j < nc ; j++) {
     if (R_FINITE(x[i1]) && R_FINITE(x[i2])) {
-	    dev = fabs(x[i1] - x[i2]);
-	    if(dev > dist)
-		dist = dev;
-	    count++;
-	}
-	i1 += nr;
-	i2 += nr;
+        dev = fabs(x[i1] - x[i2]);
+        if(dev > dist)
+        dist = dev;
+        count++;
+    }
+    i1 += nr;
+    i2 += nr;
     }
   if (count == 0) dist = NA_REAL;
   return dist;
@@ -197,14 +197,14 @@ double g_binary(double *x, int nr, int nc, int i1, int i2)
     dist = 0;
     for(j = 0 ; j < nc ; j++) {
     if (R_FINITE(x[i1]) && R_FINITE(x[i2])) {
-	    if(x[i1] || x[i2]){
-		count++;
-		if( ! (x[i1] && x[i2]) ) dist++;
-	    }
-	}
-	total++;
-	i1 += nr;
-	i2 += nr;
+        if(x[i1] || x[i2]){
+        count++;
+        if( ! (x[i1] && x[i2]) ) dist++;
+        }
+    }
+    total++;
+    i1 += nr;
+    i2 += nr;
     }
   if (count == 0) dist = NA_REAL;
   return (double) dist / count;

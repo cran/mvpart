@@ -1,4 +1,4 @@
-/* SCCS @(#)func_table.h	1.5 06/06/01  */
+/* SCCS @(#)func_table.h    1.5 06/06/01  */
 /*
 ** The table of implimented splitting functions
 **
@@ -14,18 +14,18 @@
 #define FLOAT float   /*see comments in rpart.h */
 #endif
 
-extern int anovainit( int n,	    double*y[],  int maxcat, char **error, 
-		      double *parm, int *size,   int who,    double *wt);
-extern int mrtinit( int n,	    double*y[],  int maxcat, char **error, 
-		      double *parm, int *size,   int who,    double *wt);
-extern int distinit( int n,	    double*y[],  int maxcat, char **error, 
-		      double *parm, int *size,   int who,    double *wt);		      
-extern int poissoninit(int n,	     double*y[],  int maxcat, char **error, 
-		       double *parm, int *size,   int who,    double *wt);
-extern int giniinit(int n,	     double*y[],  int maxcat, char **error, 
-		       double *parm, int *size,   int who,    double *wt);
+extern int anovainit( int n,        double*y[],  int maxcat, char **error, 
+              double *parm, int *size,   int who,    double *wt);
+extern int mrtinit( int n,      double*y[],  int maxcat, char **error, 
+              double *parm, int *size,   int who,    double *wt);
+extern int distinit( int n,     double*y[],  int maxcat, char **error, 
+              double *parm, int *size,   int who,    double *wt);             
+extern int poissoninit(int n,        double*y[],  int maxcat, char **error, 
+               double *parm, int *size,   int who,    double *wt);
+extern int giniinit(int n,       double*y[],  int maxcat, char **error, 
+               double *parm, int *size,   int who,    double *wt);
 extern int usersplit_init(int n,     double*y[],  int maxcat, char **error, 
-		       double *parm, int *size,   int who,    double *wt);
+               double *parm, int *size,   int who,    double *wt);
 
 extern void anovass   (int n,     double *y[], double *value, double *risk,
                                   double *wt);
@@ -67,17 +67,17 @@ extern double poissonpred(double *y, double *yhat);
 extern double usersplit_pred(double *y, double *yhat);
     
 static struct {
-	int  (*init_split)();
-	void (*choose_split)();
-	void (*eval)();
-	double (*error)();
-	  } func_table [] =
-		 {{anovainit,   anova,   anovass,    anovapred},
-		  {mrtinit,   mrt,   mrtss,    mrtpred},
-		  {poissoninit, poisson, poissondev, poissonpred},
-		  {giniinit, gini, ginidev, ginipred},
-		  {distinit,   dist,   distss,    distpred},
-		  {usersplit_init, usersplit, usersplit_eval, usersplit_pred}
-		 };
+    int  (*init_split)();
+    void (*choose_split)();
+    void (*eval)();
+    double (*error)();
+      } func_table [] =
+         {{anovainit,   anova,   anovass,    anovapred},
+          {mrtinit,   mrt,   mrtss,    mrtpred},
+          {poissoninit, poisson, poissondev, poissonpred},
+          {giniinit, gini, ginidev, ginipred},
+          {distinit,   dist,   distss,    distpred},
+          {usersplit_init, usersplit, usersplit_eval, usersplit_pred}
+         };
 
 #define NUM_METHODS 6  /*size of the above structure */

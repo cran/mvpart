@@ -1,4 +1,4 @@
-/* SCCS @(#)rundown2.c	@(#)rundown2.c	1.5 12/13/99 */
+/* SCCS @(#)rundown2.c  @(#)rundown2.c  1.5 12/13/99 */
 /*
 ** Run an observation down the tree, and return the predicted value,
 **    for several CP values at once.
@@ -22,22 +22,22 @@ void rundown2(struct node *tree, int obs, double *cp, double *xpred)
     */
     otree = tree;
     for (i=0; i<rp.num_unique_cp; i++) {
-	while ( cp[i] < tree->complexity) {
-	    tree = branch(tree, obs);
-	    if (tree ==0) goto oops;
-	    otree = tree;
-	    }
-	xpred[i] =  tree->response_est[0];
-	}
+    while ( cp[i] < tree->complexity) {
+        tree = branch(tree, obs);
+        if (tree ==0) goto oops;
+        otree = tree;
+        }
+    xpred[i] =  tree->response_est[0];
+    }
 
     return;
 
 oops:;
     if (rp.usesurrogate <2) { /*must have hit a missing value */
-	for (; i<rp.num_unique_cp; i++)
-	    xpred[i] = otree->response_est[0];
-	return;
-	}
+    for (; i<rp.num_unique_cp; i++)
+        xpred[i] = otree->response_est[0];
+    return;
+    }
     /*
     ** I never really expect to get to this code.  It can only happen if
     **  the last cp on my list is smaller than the terminal cp of the

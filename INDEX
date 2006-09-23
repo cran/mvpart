@@ -1,8 +1,8 @@
 car.test.frame          Automobile Data from 'Consumer Reports' 1990
 cmds.diss               Classical Scaling of Dissimilarity Measures
 gdist                   Dissimilarity Measures
-kyphosis                Data on Children who have had Corrective
-                        Spinal Surgery
+kyphosis                Data on Children who have had Corrective Spinal
+                        Surgery
 labels.rpart            Create Split Labels For an Rpart Object
 meanvar.rpart           Mean-Variance Plot for an Rpart Object
 mvpart                  Recursive Partitioning and Regression Trees
@@ -12,8 +12,7 @@ path.rpart              Follow Paths to Selected Nodes of an Rpart
 plot.rpart              Plot an Rpart Object
 plotcp                  Plot a Complexity Parameter Table for an Rpart
                         Fit
-post.rpart              PostScript Presentation Plot of an Rpart
-                        Object
+post.rpart              PostScript Presentation Plot of an Rpart Object
 predict.rpart           Predictions from a Fitted Rpart Object
 print.rpart             Print an Rpart Object
 printcp                 Displays CP table for Fitted Rpart Object

@@ -1,4 +1,4 @@
-/* SCCS  @(#)partition.c	1.5 01/06/00 */
+/* SCCS  @(#)partition.c    1.5 01/06/00 */
 /*
 ** The main workhorse of the recursive partitioning module.  When called
 **   with a node, it partitions it and then calls itself to partition the
@@ -28,73 +28,73 @@ int partition(int nodenum, struct node *splitnode, double *sumrisk)
     
     me = splitnode;
     if (nodenum >1) {
-	j=0;
-	twt =0;
-	if (rp.method!=5) {
-	for (i=0; i<rp.n; i++) 
-	if (rp.which[i] == nodenum)  {
-		rp.wtemp[j]   = rp.wt[i];
-		rp.ytemp[j++] = rp.ydata[i];
-		twt += rp.wt[i];
-		}
-	} 
-	else { 
-	for (i=0; i<rp.n; i++) 
-	if (rp.which[i] == nodenum) {
-	j++;
-	twt += rp.wt[i];
-	}
-	ii=1;
-	for (i=1; i<rp.n; i++) 
-	if (rp.which[i] == nodenum) {
-	kk=0;
-	for (k=0; k<i; k++) 
-	if (rp.which[k] == nodenum) {
-		if (ii>kk) ind=rp.n*kk-kk*(kk+1)/2+ii-kk-1;
-		else ind=rp.n*ii-ii*(ii+1)/2+kk-ii-1;
-		rp.ytemp[ind]=rp.ydata[rp.n*k-k*(k+1)/2+i-k-1];
-		kk++;
-		}
-	if (kk>0) ii++;
-	}	
-	}
-	
-	(*rp_eval)(j, rp.ytemp, me->response_est, &(me->risk), rp.wtemp);
-	me -> num_obs = j;
-	me -> sum_wt  = twt;
-	tempcp = me->risk;
-	if (tempcp > me->complexity)  tempcp = me->complexity;
-	}
+    j=0;
+    twt =0;
+    if (rp.method!=5) {
+    for (i=0; i<rp.n; i++) 
+    if (rp.which[i] == nodenum)  {
+        rp.wtemp[j]   = rp.wt[i];
+        rp.ytemp[j++] = rp.ydata[i];
+        twt += rp.wt[i];
+        }
+    } 
+    else { 
+    for (i=0; i<rp.n; i++) 
+    if (rp.which[i] == nodenum) {
+    j++;
+    twt += rp.wt[i];
+    }
+    ii=1;
+    for (i=1; i<rp.n; i++) 
+    if (rp.which[i] == nodenum) {
+    kk=0;
+    for (k=0; k<i; k++) 
+    if (rp.which[k] == nodenum) {
+        if (ii>kk) ind=rp.n*kk-kk*(kk+1)/2+ii-kk-1;
+        else ind=rp.n*ii-ii*(ii+1)/2+kk-ii-1;
+        rp.ytemp[ind]=rp.ydata[rp.n*k-k*(k+1)/2+i-k-1];
+        kk++;
+        }
+    if (kk>0) ii++;
+    }   
+    }
+    
+    (*rp_eval)(j, rp.ytemp, me->response_est, &(me->risk), rp.wtemp);
+    me -> num_obs = j;
+    me -> sum_wt  = twt;
+    tempcp = me->risk;
+    if (tempcp > me->complexity)  tempcp = me->complexity;
+    }
     else {
-	tempcp = me->risk;
-	}
-	
+    tempcp = me->risk;
+    }
+    
     /*
     ** Can I quit now ?
     */
     if (me->num_obs < rp.min_split  ||  tempcp <= rp.alpha  || 
-	nodenum > rp.maxnode) {
-	me->complexity =  rp.alpha;
-	me->leftson = (struct node *)0;
-	me->rightson= (struct node *)0;
-	*sumrisk = me->risk;
-	return(0);
-	}
+    nodenum > rp.maxnode) {
+    me->complexity =  rp.alpha;
+    me->leftson = (struct node *)0;
+    me->rightson= (struct node *)0;
+    *sumrisk = me->risk;
+    return(0);
+    }
 
     /*
     ** Guess I have to do the split
     */
     bsplit(me, nodenum);
     if (me->primary ==0) {
-	/*
-	** This is rather rare -- but I couldn't find a split worth doing
-	*/
-	me->complexity = rp.alpha;
-	me->leftson = (struct node *)0;
-	me->rightson= (struct node *)0;
-	*sumrisk = me->risk;
-	return(0);
-	}
+    /*
+    ** This is rather rare -- but I couldn't find a split worth doing
+    */
+    me->complexity = rp.alpha;
+    me->leftson = (struct node *)0;
+    me->rightson= (struct node *)0;
+    *sumrisk = me->risk;
+    return(0);
+    }
 
     if (rp.maxsur>0) (void)surrogate(me, nodenum);
     else  me->surrogate =0;
@@ -126,55 +126,55 @@ int partition(int nodenum, struct node *splitnode, double *sumrisk)
     **  whole tree, an assumption to be fixed up later.
     */
     tempcp = (me->risk - (left_risk + right_risk))/
-		    (left_split + right_split +1);
+            (left_split + right_split +1);
 
     /* Who goes first -- minimum of tempcp, leftson, and rightson */
     if ( (me->rightson)->complexity  > (me->leftson)->complexity ) {
-	if (tempcp > (me->leftson)->complexity) {
-	    /* leftson collapses first */
-	    left_risk = (me->leftson)->risk;
-	    left_split =0;
+    if (tempcp > (me->leftson)->complexity) {
+        /* leftson collapses first */
+        left_risk = (me->leftson)->risk;
+        left_split =0;
 
-	    tempcp = (me->risk - (left_risk + right_risk)) /
-			    (left_split + right_split +1);
-	    if (tempcp > (me->rightson)->complexity) {
-		/* right one goes too */
-		right_risk = (me->rightson)->risk;
-		right_split=0;
-		}
-	    }
-	}
+        tempcp = (me->risk - (left_risk + right_risk)) /
+                (left_split + right_split +1);
+        if (tempcp > (me->rightson)->complexity) {
+        /* right one goes too */
+        right_risk = (me->rightson)->risk;
+        right_split=0;
+        }
+        }
+    }
 
     else if (tempcp > (me->rightson)->complexity) {
-	/*right hand child goes first */
-	right_split =0;
-	right_risk = (me->rightson)->risk;
+    /*right hand child goes first */
+    right_split =0;
+    right_risk = (me->rightson)->risk;
 
-	tempcp = (me->risk - (left_risk + right_risk)) /
-			(left_split + right_split +1);
-	if (tempcp > (me->leftson)->complexity) {
-	    /* left one goes too */
-	    left_risk = (me->leftson)->risk;
-	    left_split=0;
-	    }
-	}
+    tempcp = (me->risk - (left_risk + right_risk)) /
+            (left_split + right_split +1);
+    if (tempcp > (me->leftson)->complexity) {
+        /* left one goes too */
+        left_risk = (me->leftson)->risk;
+        left_split=0;
+        }
+    }
 
     me->complexity= (me->risk - (left_risk + right_risk))/
-			(left_split + right_split +1);
+            (left_split + right_split +1);
 
     if (me->complexity <= rp.alpha ) {
-	/*
-	** All was in vain!  This node doesn't split after all.
-	*/
-	free_tree(me->leftson, 1);
-	free_tree(me->rightson,1);
-	me->leftson = (struct node *)0;
-	me->rightson= (struct node *)0;
-	*sumrisk = me->risk;
-	return(0);             /*return # of splits */
-	}
+    /*
+    ** All was in vain!  This node doesn't split after all.
+    */
+    free_tree(me->leftson, 1);
+    free_tree(me->rightson,1);
+    me->leftson = (struct node *)0;
+    me->rightson= (struct node *)0;
+    *sumrisk = me->risk;
+    return(0);             /*return # of splits */
+    }
     else {
-	*sumrisk = left_risk + right_risk;
-	return(left_split +right_split +1);
-	}
+    *sumrisk = left_risk + right_risk;
+    return(left_split +right_split +1);
+    }
    }

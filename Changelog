@@ -1,1 +1,2 @@
-2004 November 11  	1.0-1	Modified extension of rpart 
+2006 Aug 23         1.2.1   Fixed cmds.diss to pass arguments to xdiss and gdist functions
+2004 November 11    1.0-1   Modified extension of rpart

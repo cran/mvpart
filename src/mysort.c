@@ -1,4 +1,4 @@
-/* SCCS @(#)mysort.c	1.6 12/13/99 */
+/* SCCS @(#)mysort.c    1.6 12/13/99 */
 /*
 ** quick sort routine : sort a vector of floats, and carry along an int
 **
@@ -21,21 +21,21 @@ void mysort(int start, int stop, FLOAT *x, int *cvec)
     ** first-- if the list is short, do an ordinary insertion sort
     */
     if ((stop-start)<11) {
-	for (i=start+1; i<=stop; i++) {
-	    temp = x[i];
-	    tempd= cvec[i];
-	    j=i-1;
+    for (i=start+1; i<=stop; i++) {
+        temp = x[i];
+        tempd= cvec[i];
+        j=i-1;
 
-	    while (j>=start && (x[j]>temp)) {
-		x[j+1] = x[j];
-		cvec[j+1] = cvec[j];
-		j--;
-		}
-	    x[j+1] = temp;
-	    cvec[j+1]  = tempd;
-	    }
-	return;
-	}
+        while (j>=start && (x[j]>temp)) {
+        x[j+1] = x[j];
+        cvec[j+1] = cvec[j];
+        j--;
+        }
+        x[j+1] = temp;
+        cvec[j+1]  = tempd;
+        }
+    return;
+    }
 
     /*
     ** list is longer -- split it into two
@@ -47,17 +47,17 @@ void mysort(int start, int stop, FLOAT *x, int *cvec)
 
     median = x[k];
     if (x[i] >= x[k]) {      /* one of j or k is smallest */
-	if (x[j] > x[k]) {   /* k is smallest */
-	    if (x[i] > x[j])  median = x[j];
-	    else median= x[i];
-	    }
-	}
+    if (x[j] > x[k]) {   /* k is smallest */
+        if (x[i] > x[j])  median = x[j];
+        else median= x[i];
+        }
+    }
     else {
-	if (x[j] < x[k]) {
-	    if (x[i] > x[j]) median = x[i];
-	    else median = x[j];
-	    }
-	}
+    if (x[j] < x[k]) {
+        if (x[i] > x[j]) median = x[i];
+        else median = x[j];
+        }
+    }
 
     /* 
     **  Now actually do the partitioning 
@@ -73,26 +73,26 @@ void mysort(int start, int stop, FLOAT *x, int *cvec)
     **   
     */
     while (i<j) {
-	/*
-	** top pointer down till it points at something too large
-	*/
-	while (x[i] < median) i++;
+    /*
+    ** top pointer down till it points at something too large
+    */
+    while (x[i] < median) i++;
 
-	/*
-	** bottom pointer up until it points at something too small
-	*/
-	while(x[j] > median) j--;
+    /*
+    ** bottom pointer up until it points at something too small
+    */
+    while(x[j] > median) j--;
 
-	if (i<j) {
-	    if (x[i] > x[j]) {  /* swap */
-		temp = x[i];
-		x[i] = x[j];
-		x[j] = temp;
-		tempd= cvec[i];   cvec[i] =cvec[j];  cvec[j] =tempd;
-		}
-	    i++; j--;
-	    }
-	}
+    if (i<j) {
+        if (x[i] > x[j]) {  /* swap */
+        temp = x[i];
+        x[i] = x[j];
+        x[j] = temp;
+        tempd= cvec[i];   cvec[i] =cvec[j];  cvec[j] =tempd;
+        }
+        i++; j--;
+        }
+    }
 
     /*
     ** The while() step helps if there are lots of ties.  It will break
@@ -109,13 +109,13 @@ void mysort(int start, int stop, FLOAT *x, int *cvec)
     **       depth of nested calls to less than log_base2(n).
     */
     if ((i-start) < (stop-j)) { /* top list is shorter */
-	if ((i-start)>0) mysort(start,i, x, cvec);
-	start =j; 
-	}
+    if ((i-start)>0) mysort(start,i, x, cvec);
+    start =j; 
+    }
 
     else {    /* bottom list is shorter */
-	if ((stop -j)>0) mysort(j,stop, x, cvec);
-	stop=i; 
-	}
+    if ((stop -j)>0) mysort(j,stop, x, cvec);
+    stop=i; 
+    }
      }
   }

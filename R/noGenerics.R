@@ -1,0 +1,2 @@
+".noGenerics" <-
+TRUE
