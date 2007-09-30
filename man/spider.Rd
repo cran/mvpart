@@ -1,6 +1,5 @@
 \name{spider}
 \alias{spider}
-\non_function{}
 \title{Spider Data}
 \description{
   The \code{spider} data frame has 28 rows and 18 columns. 
