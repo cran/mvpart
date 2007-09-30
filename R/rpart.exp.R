@@ -83,9 +83,9 @@ function(y, offset, parms, wt) {
         # there is both a start time and a stop time
         #  compute the amount of time NOT spent in the interval that
         #  the start time lies in.
-        stime <- y[,1]   #start time for each interval
-        index2<- unclass(cut(stime, itable, include.lowest=TRUE))
-        itime2<- stime - itable[index2]
+        # stime <- y[,1]   #start time for each interval
+        index2<- unclass(cut(y[,1], itable, include.lowest=TRUE))
+        itime2<- y[,1] - itable[index2]
         }
 
     # Compute the amount of person-years in each of the intervals
@@ -119,7 +119,7 @@ function(y, offset, parms, wt) {
     cumhaz <- cumsum(c(0, rate*diff(itable)))
     newy <- approx(itable, cumhaz, time)$y
     if (ny==3) {
-    newy <- newy - approx(itable, cumhaz, stime)$y
+    newy <- newy - approx(itable, cumhaz, y[,1])$y
     }
 
     if (length(offset)==n)  newy <- newy * exp(offset)

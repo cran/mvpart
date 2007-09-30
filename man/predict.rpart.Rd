@@ -9,7 +9,7 @@
 }
 \usage{
 \method{predict}{rpart}(object, newdata=list(),
-       type=c("vector", "prob", "class", "matrix"), ...)
+       type=c("vector", "prob", "class", "matrix", "where"), ...)
 }
 \arguments{
   \item{object}{

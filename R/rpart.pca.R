@@ -1,13 +1,13 @@
 "rpart.pca" <-
-function (tree, pts = TRUE, plt.allx = TRUE, speclab = TRUE,
-    specvecs = TRUE, wgt.ave = FALSE, add.tree = TRUE,  
-    cv1 = 1, cv2 = 2, interact = FALSE, ...) 
+function (tree, pts = TRUE, plt.allx = TRUE, speclab = TRUE, 
+    specvecs = TRUE, wgt.ave = FALSE, add.tree = TRUE, cv1 = 1, 
+    cv2 = 2, chulls = TRUE, interact = FALSE, ...) 
 {
     if (tree$method != "mrt") 
         stop("Only for multivariate trees !! \n")
     if (nrow(tree$frame) < 4) 
         stop("Only 2 terminal nodes -- PCA not done !! \n")
-    old.par <- par(mar = rep(2, 4))
+    old.par <- par(mar = rep(2, 4), xpd = TRUE)
     on.exit(par(old.par))
     frame <- tree$frame
     ncf <- ncol(frame)
@@ -32,11 +32,11 @@ function (tree, pts = TRUE, plt.allx = TRUE, speclab = TRUE,
     z <- svd(temp)
     maxd <- sum(z$d > 1e-06)
     d <- diag(z$d[1:maxd])
-    xall <- z$u[, 1:maxd, drop = FALSE ] %*% d
-    x <- amat %*% (z$v)[, 1:maxd, drop = FALSE ]
+    xall <- z$u[, 1:maxd, drop = FALSE] %*% d
+    x <- amat %*% (z$v)[, 1:maxd, drop = FALSE]
     xlv <- x[leaves, ]
     if (!wgt.ave) 
-        y <- z$v[, 1:maxd, drop = FALSE ]
+        y <- z$v[, 1:maxd, drop = FALSE]
     else {
         specvecs <- FALSE
         rc <- apply(tnode.means * frame$n[leaves], 2, sum)
@@ -51,8 +51,8 @@ function (tree, pts = TRUE, plt.allx = TRUE, speclab = TRUE,
     ymax <- max(dstat)
     ymin <- min(0, min(dstat))
     treegrps <- as.numeric(factor(treegrps))
-    xx <- (scale(as.matrix(data), center = TRUE , scale = FALSE ) %*% 
-        z$v)[, 1:maxd, drop = FALSE ]
+    xx <- (scale(as.matrix(data), center = TRUE, scale = FALSE) %*% 
+        z$v)[, 1:maxd, drop = FALSE]
     xrb <- rbind(x, xx)
     if (plt.allx) {
         mxx <- sqrt(apply(xrb[, c(cv1, cv2)]^2, 1, sum))
@@ -66,10 +66,9 @@ function (tree, pts = TRUE, plt.allx = TRUE, speclab = TRUE,
     myy <- sqrt(apply(y[, c(cv1, cv2)]^2, 1, sum))
     sc <- ifelse(wgt.ave, 1, max(mxx)/max(myy))
     repeat {
-        plot(c(sc * y[, cv1], x[, cv1]), c(sc * y[, cv2], 
-            x[, cv2]), axes = FALSE , xlab = "", ylab = "", type = "n", 
+        plot(c(sc * y[, cv1], xx[, cv1]), c(sc * y[, cv2], xx[, 
+            cv2]), axes = FALSE, xlab = "", ylab = "", type = "n", 
             asp = 1)
-        points(0, 0, pch = 4, col = 7, cex = 2)
         cxy <- par("cxy")
         sze <- par()$fin/par()$din
         adj <- ifelse(pts, cxy[2] * sze[2], 0)
@@ -80,18 +79,6 @@ function (tree, pts = TRUE, plt.allx = TRUE, speclab = TRUE,
             cex = 0.85 * par()$cex)
         mtext(dlabs[cv2], side = 2, las = 0, adj = 0, line = 0, 
             cex = 0.85 * par()$cex)
-        if (plt.allx) {
-            unitg <- sort(unique(treegrps))
-            for (i in 1:length(unitg)) points(xx[unitg[i] == 
-                treegrps, cv1], xx[unitg[i] == treegrps, cv2], 
-                pch = 16, col = i + 1, cex = par()$cex)
-        }
-        if (pts) {
-            lvnode <- sort(node[leaves])
-            for (i in 1:length(lvnode)) points(xlv[, cv1][lvnode[i] == 
-                lvnode], xlv[, cv2][lvnode[i] == lvnode], pch = 16, 
-                cex = 2 * par()$cex, col = i + 1)
-        }
         if (add.tree) {
             pp <- match(c(even.node, even.node + 1), node)
             nn <- length(even.node)
@@ -100,10 +87,31 @@ function (tree, pts = TRUE, plt.allx = TRUE, speclab = TRUE,
             segments(x[from, cv1], x[from, cv2], x[to, cv1], 
                 x[to, cv2])
         }
+        if (chulls) {
+            unitg <- sort(unique(treegrps))
+            for (i in 1:length(unitg)) {
+                hpts <- chull(xx[unitg[i] == treegrps,c(cv1,cv2)])
+                hpts <- c(hpts,hpts[1])
+                lines(xx[unitg[i] == treegrps, c(cv1,cv2)][hpts,], col = i + 1)        
+                }
+        }
+        if (plt.allx) {
+            unitg <- sort(unique(treegrps))
+            for (i in 1:length(unitg)) 
+                points(xx[unitg[i] == treegrps, cv1], xx[unitg[i] == treegrps, cv2], 
+                pch = 21, col = 1, bg = i + 1, cex = 1.2*par()$cex)
+        }
+        if (pts) {
+            lvnode <- sort(node[leaves])
+            for (i in 1:length(lvnode)) 
+                points(xlv[, cv1][lvnode[i] == lvnode], xlv[, cv2][lvnode[i] == lvnode],
+                pch = 21, cex = 2 * par()$cex, col = 1, bg = i + 1)
+        }
+
         if (speclab) 
             text(sc * y[, cv1], sc * y[, cv2] + 0.5 * adj * specvecs * 
                 (y[, cv2] > 0), specs, col = "black", cex = par()$cex)
-        points(0, 0, pch = 3, cex = par()$cex * 3, col = 1)
+        points(0, 0, pch = 3, cex = par()$cex * 2.5, col = 1)
         if (interact) {
             z <- locator(1)
             if (length(z$x)) {
@@ -124,5 +132,5 @@ function (tree, pts = TRUE, plt.allx = TRUE, speclab = TRUE,
         }
         else (break)
     }
-    invisible()
+    invisible(list(y = sc * y, xlv = xlv, xx = xx))
 }

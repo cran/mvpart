@@ -27,7 +27,7 @@ function(fit, xval=10, cp)
         yflag <- TRUE
         Y <- model.extract(m, "response")
             offset <- attr(Terms, "offset")
-        if (method != user) {
+        if (method != "user") {
         init <- (get(paste("rpart", method, sep='.')))(Y,offset, NULL)
         Y <- as.matrix(init$y)
         numy <- ncol(Y)
@@ -93,7 +93,7 @@ function(fit, xval=10, cp)
     if (is.null(costs)) costs <- rep(1.0, nvar)
 
     parms <- fit$parms
-    if (method=='user') {
+    if (method=="user") {
     mlist <- fit$functions
     if (length(parms)==0) init <- mlist$init(Y, offset, wt=wt)
     else                  init <- mlist$init(Y, offset, parms, wt)

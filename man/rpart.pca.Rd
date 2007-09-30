@@ -9,7 +9,7 @@ Plots a PCA of the rpart object on the current graphics device.
 \usage{
 \method{rpart}{pca}(tree, pts = TRUE, plt.allx = TRUE, speclab = TRUE,
     specvecs = TRUE, wgt.ave = FALSE, add.tree = TRUE,  
-    cv1 = 1, cv2 = 2, interact = FALSE, \dots) 
+    cv1 = 1, cv2 = 2, chulls = TRUE, interact = FALSE, \dots) 
 }
 \arguments{
 \item{tree}{
@@ -40,6 +40,9 @@ Defines the principal component to plot horizontally -- but see \code{interact}.
 }
 \item{cv2}{
 Defines the principal component to plot vertically -- but see \code{interact}.
+}
+\item{chulls}{
+If \code{TRUE} adds convex hulls to thr tree groups.
 }
 \item{interact}{
 If \code{TRUE} the plot can be viewed in dimensions by left-clicking to 

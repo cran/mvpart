@@ -123,10 +123,10 @@ plot(z.auto); text(z.auto)
 
 data(spider)
 fit1 <- rpart(data.matrix(spider[,1:12])~water+twigs+reft+herbs+moss+sand,spider,method="mrt")
-fit2 <- rpart(gdist(spider[,1:12],meth="bray",full=TRUE,sq=TRUE)~water+twigs+reft+herbs+moss+sand,spider,method="dist")
-par(mfrow=c(1,2))
 plot(fit1); text(fit1)
+fit2 <- rpart(data.matrix(spider[,1:12])~water+twigs+reft+herbs+moss+sand,spider,method="mrt",dissim="man")
 plot(fit2); text(fit2)
-
+fit3 <- rpart(gdist(spider[,1:12],meth="bray",full=TRUE,sq=TRUE)~water+twigs+reft+herbs+moss+sand,spider,method="dist")
+plot(fit3); text(fit3)
 }
 \keyword{tree}

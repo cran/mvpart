@@ -9,6 +9,11 @@ function (form, data, minauto = TRUE, size, xv = c("1se", "min",
     wgt.ave.pca = FALSE, keep.y = TRUE, ...) 
 {
     call <- match.call()
+
+	number <-
+		function (x) {
+		    match(x, sort(unique(x)))
+	}
     cv.var <- function(x, cv = 10)  {
         x <- match(x, sort(unique(x)))
         luni <- length(unique(x))
@@ -32,7 +37,6 @@ function (form, data, minauto = TRUE, size, xv = c("1se", "min",
         minsplit <- ceiling(log2(n))
         minbucket <- ceiling(minsplit/3)
     }
-    use.size <- FALSE
     z <- rpart(form, data = data, ...)
     if (all(z$where==1)) {
     cat("No splits possible -- try decreasing cp\n")
@@ -40,6 +44,7 @@ function (form, data, minauto = TRUE, size, xv = c("1se", "min",
     }
     old.par <- par(mar = c(6, 4, 4, 4) + 0.1, xpd = NA, cex = 0.85*par()$cex)
     on.exit(par(old.par))
+
     if (!is.null(z)) {
         xval <- z$control$xval
         if (xvmult > 1) {
@@ -67,6 +72,7 @@ function (form, data, minauto = TRUE, size, xv = c("1se", "min",
             cat("Minimum tree sizes\n")
             print(table(tabmins))
         }
+        if (missing(size)) {
         if (xv == "pick") {
             if (xvmult <= 1) 
                 plotcp(z, xvse, pch = 16, col = 2)
@@ -100,8 +106,9 @@ function (form, data, minauto = TRUE, size, xv = c("1se", "min",
                 use.size <- TRUE
                 size <- 2
             }
+            }
         }
-        if (use.size || !missing(size)) {
+        else {
             if (size <= 2) 
                 cpp <- z$cptable[2, 1]
             else if (size >= max(z$cptable[, 2] + 1)) 

@@ -80,7 +80,7 @@ function(data, dcrit = 1, dauto = TRUE , dinf = 0.5, method = "man", use.min = T
                 big,
                 PACKAGE="mvpart")$d
         if(any(dnew == -1, na.rm = TRUE ))
-                attr(dnew, "ok") <- F
+                attr(dnew, "ok") <- FALSE
         else attr(dnew, "ok") <- TRUE 
         if(any(dnew == -1))
                 cat("WARNING : Data disconnected\n")
