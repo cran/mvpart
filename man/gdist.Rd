@@ -68,7 +68,7 @@ gdist(x, method="bray", keepdiag=FALSE, full=FALSE, sq=FALSE)
   standardizations. 
 }
 \value{
-  Should be interchangeable with \code{\link[mva]{dist}} and returns a
+  Should be interchangeable with \code{\link[stats]{dist}} and returns a
   distance object of the same type.
 }
 \references{ Faith, D.P, Minchin, P.R. and Belbin, L. (1987)
@@ -77,7 +77,7 @@ gdist(x, method="bray", keepdiag=FALSE, full=FALSE, sq=FALSE)
 
 \author{ Jari Oksanen  -- modified Glenn De'ath (Dec 03)}
 
-\note{The  function is an alternative to \code{\link[mva]{dist}} adding
+\note{The  function is an alternative to \code{\link[stats]{dist}} adding
   some ecologically meaningful indices.  Both methods should produce
   similar types of objects which can be interchanged in any method
   accepting either.  Manhattan and Euclidean dissimilarities should be

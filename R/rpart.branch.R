@@ -1,15 +1,5 @@
 "rpart.branch" <-
 function(x, y, node, branch) {
-    if (missing(branch)) {
-    if (exists(parms <-paste(".rpart.parms", dev.cur(), sep="." ),
-                   envir=.GlobalEnv)) {
-#       parms <- get(parms, frame=0)
-            parms <- get(parms, envir=.GlobalEnv)
-            branch <- parms$branch
-        }
-    else branch <- 0
-        }
-
     # Draw a series of horseshoes, left son, up, over, down to right son
     #   NA's in the vector cause lines() to "lift the pen"
     is.left <- (node%%2 ==0)        #left hand sons

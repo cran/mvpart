@@ -51,7 +51,7 @@ a split to be attempted.
   missing the primary variable; if all surrogates are missing the observation
   is not split.  2= if all surrogates are missing, then send the observation
   in the majority direction.  A value of 0 corresponds to the action of
-  \code{tree}, and 2 to the recommendations of Breiman, et.al.
+  tree, and 2 to the recommendations of Breiman, et.al.
 }
 \item{xval}{
 number of cross-validations 

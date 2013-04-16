@@ -1,5 +1,4 @@
-"mvpart" <-
-function (form, data, minauto = TRUE, size, xv = c("1se", "min", 
+"mvpart" <- function (form, data, minauto = TRUE, size, xv = c("1se", "min", 
     "pick", "none"), xval = 10, xvmult = 0, xvse = 1, snip = FALSE, 
     plot.add = TRUE, text.add = TRUE, digits = 3, margin = 0, 
     uniform = FALSE, which = 4, pretty = TRUE, use.n = TRUE, 
@@ -42,7 +41,7 @@ function (form, data, minauto = TRUE, size, xv = c("1se", "min",
     cat("No splits possible -- try decreasing cp\n")
     return(z)
     }
-    old.par <- par(mar = c(6, 4, 4, 4) + 0.1, xpd = NA, cex = 0.85*par()$cex)
+    old.par <- par(mar = c(6, 4, 4, 4) + 0.1, xpd = NA, cex = par()$cex)
     on.exit(par(old.par))
 
     if (!is.null(z)) {

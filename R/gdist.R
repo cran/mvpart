@@ -2,7 +2,7 @@
 function(x, method = "bray", keepdiag = FALSE , full = FALSE, sq = FALSE)
 {
     METHODS <- c("manhattan", "euclidean", "canberra", "bray", "kulczynski", "gower", 
-    "maximum", "binary", "chisq", "chord")
+    "maximum", "binary", "chisq", "chord", "beta0", "beta1", "beta2")
     method <- pmatch(method, METHODS)
     if(is.na(method))
         stop("invalid distance method")
@@ -19,6 +19,7 @@ function(x, method = "bray", keepdiag = FALSE , full = FALSE, sq = FALSE)
         x <- x/(mns * sqrt(2))
         method <- 2
     }
+	else if(method > 10) method <- method - 2
     d <- .C("gdistance",
         x = as.double(x),
         nr = N,

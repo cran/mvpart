@@ -82,27 +82,27 @@ void dist(int n,    double *y[],  FLOAT *x,     int nclass,
     total = total/n;    
 
     for (i=0; right_n>edge; i++) {
-        temp=0; sumdiffs_sq=0; left_n++;  right_n--;
-    right_sum=0; left_sum=0;
+	    temp=0; sumdiffs_sq=0; left_n++;  right_n--;
+		right_sum=0; left_sum=0;
 
-    if (i==0) left_sum=0;
-    else {
-    for (k=1; k<=i; k++)
-    for (j=0; j<k; j++)  
-    left_sum += *y[rp.n*j-j*(j+1)/2+k-j-1];
-    left_sum = left_sum/(i+1);
-    }
-    
-    if (i==(n-1)) right_sum=0;
-    else {
-    for (k=i+2; k<n; k++) 
-    for (j=i+1; j<k; j++) 
-    right_sum += *y[rp.n*j-j*(j+1)/2+k-j-1];
-    right_sum = right_sum/(n-i-1);
-    }
+		if (i==0) left_sum=0;
+		else {
+			for (k=1; k<=i; k++)
+			for (j=0; j<k; j++)  
+			left_sum += *y[rp.n*j-j*(j+1)/2+k-j-1];
+			left_sum = left_sum/(i+1);
+		}
+		
+		if (i==(n-1)) right_sum=0;
+		else {
+			for (k=i+2; k<n; k++) 
+			for (j=i+1; j<k; j++) 
+			right_sum += *y[rp.n*j-j*(j+1)/2+k-j-1];
+			right_sum = right_sum/(n-i-1);
+		}
 
         if (x[i+1] !=x[i] &&  left_n>=edge) {
-        temp = total-left_sum-right_sum;
+	        temp = total-left_sum-right_sum;
 
         if (temp > best) {
             best = temp;
@@ -111,7 +111,7 @@ void dist(int n,    double *y[],  FLOAT *x,     int nclass,
                       else    direction = RIGHT;
             }
         }
-        }
+    }
 
     *improve =  best/ myrisk;
     if (best>0) {   /* found something */

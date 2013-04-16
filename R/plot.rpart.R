@@ -1,5 +1,4 @@
-"plot.rpart" <-
-function (x, uniform = FALSE, branch = 1, compress = FALSE, nspace, 
+"plot.rpart" <- function (x, uniform = FALSE, branch = 1, compress = FALSE, nspace, 
     margin = 0.0, minbranch = 0.3, bar = 0.03, ...) 
 {
     if (!inherits(x, "rpart")) 
@@ -11,12 +10,11 @@ function (x, uniform = FALSE, branch = 1, compress = FALSE, nspace,
     if (!compress) 
         nspace <- -1
     dev <- dev.cur()
-    if (dev == 1) 
-        dev <- 2
-    assign(paste(".rpart.parms", dev, sep = "."), list(uniform = uniform, 
-        branch = branch, nspace = nspace, minbranch = minbranch), 
-        envir = .GlobalEnv)
-    temp <- rpartco(x)
+
+##  added 15/04/13 
+    parms <- list(uniform = uniform, branch = branch, nspace = nspace,
+                 minbranch = minbranch)
+    temp <- rpartco(x,parms)
     xx <- temp$x
     yy <- temp$y
     temp1 <- range(xx) + diff(range(xx)) * c(-margin, margin)

@@ -8,10 +8,6 @@ Gives a visual representation of the cross-validation results in an
 \code{rpart} object. 
 }
 \usage{
-plotcp(x, xvse = 1, minline = TRUE, upper = c("size", 
-    "splits", "none"), tab, resub.err = TRUE, adj.df = FALSE, ...) 
-}
-\synopsis{
 plotcp(x, xvse = 1, minline = TRUE, lty = 3, col = 1, upper = c("size", 
     "splits", "none"), tab, resub.err = TRUE, adj.df = FALSE, ...) 
 }
@@ -24,6 +20,12 @@ multiplier for xvse * SE above the minimum of the curve.
 }
 \item{minline}{
 whether a horizontal line is drawn 1SE above the minimum of the curve. 
+}
+\item{lty}{
+type of lines used in plot, default = 3. 
+}
+\item{col}{
+color of lines, default =1. 
 }
 \item{upper}{
 what is plotted on the top axis: the size of the tree (the number of

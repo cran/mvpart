@@ -28,7 +28,7 @@
     the \code{rpart} object is a classification tree, then the default is to
     return \code{prob} predictions, a matrix whose columns are the
     probability of the first, second, etc. class.  (This agrees with the
-    default behavior of \code{\link[tree]{tree}}).  Otherwise, a vector
+    default behavior of tree).  Otherwise, a vector
     result is returned.
   }
   \item{\dots}{further arguments passed to or from other methods.}

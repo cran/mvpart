@@ -1,5 +1,5 @@
 "rpart.pca" <-
-function (tree, pts = TRUE, plt.allx = TRUE, speclab = TRUE, 
+function (tree, pts = TRUE, plt.allx = TRUE, speclabs = TRUE, 
     specvecs = TRUE, wgt.ave = FALSE, add.tree = TRUE, cv1 = 1, 
     cv2 = 2, chulls = TRUE, interact = FALSE, ...) 
 {
@@ -108,7 +108,7 @@ function (tree, pts = TRUE, plt.allx = TRUE, speclab = TRUE,
                 pch = 21, cex = 2 * par()$cex, col = 1, bg = i + 1)
         }
 
-        if (speclab) 
+        if (speclabs) 
             text(sc * y[, cv1], sc * y[, cv2] + 0.5 * adj * specvecs * 
                 (y[, cv2] > 0), specs, col = "black", cex = par()$cex)
         points(0, 0, pch = 3, cex = par()$cex * 2.5, col = 1)

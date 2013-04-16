@@ -1,12 +1,12 @@
 "plotcp" <-
-function (x, xvse = 1, minline = TRUE , lty = 3, col = 1, upper = c("size", 
-    "splits", "none"), tab, resub.err = TRUE , adj.df = FALSE , ...) 
+function (x, xvse = 1, minline = TRUE , lty = 3, col = 1, upper = c("size",
+    "splits", "none"), tab, resub.err = TRUE , adj.df = FALSE , ...)
 {
-    if (!inherits(x, "rpart")) 
+    if (!inherits(x, "rpart"))
         stop("Not legitimate rpart object")
     upper <- match.arg(upper)
     p.rpart <- x$cptable
-    if (xv <- (ncol(p.rpart) > 3)) 
+    if (xv <- (ncol(p.rpart) > 3))
     {
     xstd <- p.rpart[, 5]
     xerror <- p.rpart[, 4]
@@ -25,44 +25,44 @@ function (x, xvse = 1, minline = TRUE , lty = 3, col = 1, upper = c("size",
         yhi <- max(error) + 0.05
     }
     ylim <- c(ylo, yhi)
-    plot(ns, error, axes = FALSE , xlab = "cp", ylab = "X-val Relative Error", 
+    plot(ns, error, axes = FALSE , xlab = "cp", ylab = "X-val Relative Error",
         ylim = ylim, type = "n", ...)
-    if (xv) {    
+    if (xv) {
     inpt <- (xerror == min(xerror))
     points(ns[inpt], xerror[inpt], col = "red", pch = 16, cex = 2)
     inpt <- min(ns[xerror < min(xerror + xvse * xstd)])
-    points(ns[inpt], xerror[inpt], col = "orange", pch = 16, 
+    points(ns[inpt], xerror[inpt], col = "orange", pch = 16,
         cex = 2)
     points(ns, xerror, type = "b", col = "blue", ...)
-    segments(ns, xerror - xstd, ns, xerror + xstd, col = "blue", 
+    segments(ns, xerror - xstd, ns, xerror + xstd, col = "blue",
         ...)
     }
-    if (resub.err) 
-        points(ns, error, type = "b", lty = 1, col = "darkgreen", 
+    if (resub.err)
+        points(ns, error, type = "b", lty = 1, col = "darkgreen",
             ...)
     box()
     axis(2, ...)
-    axis(1, at = ns, lab = as.character(signif(cp, 2)), ...)
+    axis(1, at = ns, labels = as.character(signif(cp, 2)), ...)
     if (!missing(tab)) {
         xp <- as.numeric(names(tab))
-        segments(ns[match(xp, nsplit + 1)], yhi, ns[match(xp, 
-            nsplit + 1)], yhi - 0.5 * (tab/sum(tab)) * (yhi - 
+        segments(ns[match(xp, nsplit + 1)], yhi, ns[match(xp,
+            nsplit + 1)], yhi - 0.5 * (tab/sum(tab)) * (yhi -
             ylo), col = col + 1, lwd = 2, ...)
     }
     switch(upper, size = {
-        axis(3, at = ns, lab = as.character(nsplit + 1), ...)
-        mtext("Size of tree", side = 3, line = 3, cex = par()$cex, 
+        axis(3, at = ns, labels = as.character(nsplit + 1), ...)
+        mtext("Size of tree", side = 3, line = 3, cex = par()$cex,
             ...)
     }, splits = {
-        axis(3, at = ns, lab = as.character(nsplit), ...)
+        axis(3, at = ns, labels = as.character(nsplit), ...)
         mtext("Number of splits", side = 3, line = 3, ...)
     }, )
     if (xv) {
     minpos <- min(seq(along = xerror)[xerror == min(xerror)])
     if (minline) {
-        abline(h = (xerror + xvse * xstd)[minpos], lty = 1, col = col, 
+        abline(h = (xerror + xvse * xstd)[minpos], lty = 1, col = col,
             xpd = FALSE )
-        text(ns[2], (xerror + 0.5 * xvse * xstd)[minpos], paste("Min +", 
+        text(ns[2], (xerror + 0.5 * xvse * xstd)[minpos], paste("Min +",
             xvse, "SE"), col = col, ...)
     }
     }

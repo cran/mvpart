@@ -1,23 +1,15 @@
-"rpartco" <-
-function(tree, parms =  paste(".rpart.parms", dev.cur(), sep = "."))
+"rpartco" <- function(tree, parms)
     {
+     uniform <- parms$uniform
+     nspace <- parms$nspace
+     nbranch <- parms$nbranch
+     minbranch <- parms$minbranch
 
     frame <- tree$frame
     method <- tree$method
     node <- as.numeric(row.names(frame))
     depth <- tree.depth(node)
     is.leaf <- (frame$var == '<leaf>')
-    if (exists(parms, envir=.GlobalEnv)) {
-    parms <- get(parms, envir=.GlobalEnv)
-    uniform <- parms$uniform
-    nspace <-parms$nspace
-    minbranch <- parms$minbranch
-    }
-    else {
-    uniform <- FALSE
-    nspace <- -1
-    minbranch <- .3
-        }
 
     if(uniform) y <- (1 + max(depth) -depth) / max(depth,4)
     else {                    #make y- (parent y) = change in deviance
@@ -129,15 +121,7 @@ function(tree, parms =  paste(".rpart.parms", dev.cur(), sep = "."))
          right= c(x[me]- nspace*(x[me] -x[rson]), tempr),
          depth= maxd+ depth, sons=c(me, left$sons, right$sons))
     }
-#    assign('compress', compress)
-#    assign('x', x)
-#    assign('is.leaf', is.leaf)
-#    assign('nspace', nspace)
-
-#    temp <-
     compress(1, 1)
-#    x <- get('x')
-#    remove(c('compress', 'x', 'is.leaf', 'nspace'))
     list(x = x, y = y)
 }
 

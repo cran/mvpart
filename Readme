@@ -25,4 +25,4 @@ R-functions have been made.
 (3) Methods for calculating increased forms of dissimilarities and for scaling matrices 
 	have been added. These are designed in particluar for community ecology.
 	
-(3) text.rpart has been modified to include graphical annotation of nodes.
+(4) text.rpart has been modified to include graphical annotation of nodes.

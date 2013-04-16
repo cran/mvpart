@@ -10,7 +10,8 @@
 \method{text}{rpart}(x, splits = TRUE, which = 4, label = "yval", FUN = text, 
     all.leaves = FALSE, pretty = NULL, digits = getOption("digits") - 2,
     tadj = 0.65, stats = TRUE, use.n = FALSE, bars = TRUE, 
-    legend = FALSE, xadj = 1, yadj = 1, bord = FALSE, big.pts = FALSE, \dots)
+    legend = FALSE, xadj = 1, yadj = 1, bord = FALSE, big.pts = FALSE,
+    uniform = FALSE, branch = 1, nspace = -1, minbranch = 0.3, \dots)
 }
 
 \arguments{
@@ -77,6 +78,18 @@ Adjustment of text above (or below) splits.
 \item{big.pts}{
  Adds color coded points to nodes. Useful to track groups to PCA plot
 (see \code{rpart.pca}).
+}
+\item{uniform}{
+ Uniform spacing of tree branches; defualt is FALSE.
+}
+\item{branch}{
+ branch parameter default = 1.
+}
+\item{nspace}{
+ branch parameter default = 1.
+}
+\item{minbranch}{
+ minimum branch parameter default = 0.3.
 }
 \item{\dots}{
   Graphical parameters may also be supplied as arguments to this

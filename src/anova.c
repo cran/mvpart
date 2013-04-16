@@ -107,17 +107,17 @@ void anova(int n,    double *y[],     FLOAT *x,     int nclass,
         left_sum  +=temp;
         right_sum -=temp;
         if (x[i+1] !=x[i] &&  left_n>=edge) {
-        if (rp.dissim==1) temp = left_sum * left_sum / left_wt  +
-                right_sum * right_sum / right_wt;
-        else if (rp.dissim==2) temp = fabs(left_sum) + fabs(right_sum);
-        if (temp > best) {
-            best=temp;
-            where =i;
-            if (left_sum < right_sum) direction = LEFT;
-                      else    direction = RIGHT;
-            }
+		    if (rp.dissim==1) temp = left_sum * left_sum / left_wt  +
+		            right_sum * right_sum / right_wt;
+		    else if (rp.dissim==2) temp = fabs(left_sum) + fabs(right_sum);
+		    if (temp > best) {
+		        best=temp;
+		        where =i;
+		        if (left_sum < right_sum) direction = LEFT;
+	            else direction = RIGHT;
+	        }
         }
-        }
+    }
 
     *improve =  best/ myrisk;
     if (best>0) {   /* found something */
@@ -174,15 +174,15 @@ void anova(int n,    double *y[],     FLOAT *x,     int nclass,
         else if (rp.dissim==2) temp = fabs(left_sum) + fabs(right_sum);
         if (temp > best) {
             best=temp;
-            if ((left_sum/left_wt) > (right_sum/right_wt)) {
-            for (i=0; i<nclass; i++) csplit[i] = -tsplit[i];
-            }
-            else {
-            for (i=0; i<nclass; i++) csplit[i] = tsplit[i];
-            }
+		        if ((left_sum/left_wt) > (right_sum/right_wt)) {
+			        for (i=0; i<nclass; i++) csplit[i] = -tsplit[i];
+		        }
+		        else {
+			        for (i=0; i<nclass; i++) csplit[i] = tsplit[i];
+		        }
             }
         }
-        }
+    }
 
     *improve = best/ myrisk;      /* % improvement */
     }

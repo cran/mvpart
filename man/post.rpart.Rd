@@ -64,7 +64,7 @@ Users are encouraged to write their own function containing favorite
 options. 
 }
 \seealso{
-\code{\link{plot.rpart}},  \code{\link{rpart}},  \code{\link{text.rpart}},  \code{\link{abbreviate}}   
+\code{\link{plot.rpart}},  \code{\link{rpart}},  \code{\link{text.rpart}} 
 }
 \examples{
 data(car.test.frame)

@@ -1,4 +1,4 @@
-"makeForm" <-
+"makeform" <-
 function (data, ycol, xcol, zcol, FUN, maxy = 20, extra) 
 {
     ny <- length(ycol)

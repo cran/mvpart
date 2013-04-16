@@ -1,5 +1,5 @@
-\name{makeForm}
-\alias{makeForm}
+\name{makeform}
+\alias{makeform}
 \title{Formula Constructor}
 \description{
   This function constructs a formula from a data frame given the locations of the
@@ -7,7 +7,7 @@
 }
 
 \usage{
-makeForm(data, ycol, xcol, zcol, FUN, maxy = 20, extra)
+makeform(data, ycol, xcol, zcol, FUN, maxy = 20, extra)
 }
 
 \arguments{
@@ -23,7 +23,7 @@ makeForm(data, ycol, xcol, zcol, FUN, maxy = 20, extra)
 }
 
 \details{
-makeForm constructs a formula and is useful for long and/or repetitive formulae.
+makeform constructs a formula and is useful for long and/or repetitive formulae.
 See examples below.
 }
 
@@ -34,26 +34,26 @@ See examples below.
   
 \examples{
 data(spider)
-makeForm(spider,1,13:18)
+makeform(spider,1,13:18)
 # arct.lute ~ water + sand + moss + reft + twigs + herbs
 
-makeForm(spider,1:12,13:18)
+makeform(spider,1:12,13:18)
 # cbind(arct.lute, pard.lugu, zora.spin, pard.nigr, pard.pull, 
 # aulo.albi, troc.terr, alop.cune, pard.mont, alop.acce, alop.fabr, 
 # arct.peri) ~ water + sand + moss + reft + twigs + herbs
 
-makeForm(spider,1:12,13:15,16:18)
+makeform(spider,1:12,13:15,16:18)
 # cbind(arct.lute, pard.lugu, zora.spin, pard.nigr, pard.pull, 
 # aulo.albi, troc.terr, alop.cune, pard.mont, alop.acce, alop.fabr, 
 # arct.peri) ~ water + sand + moss + Condition(reft + twigs + herbs)
 
-makeForm(spider,1:12,13:15,maxy=6)
+makeform(spider,1:12,13:15,maxy=6)
 # as.matrix(spider[, 1:12]) ~ water + sand + moss
 
-makeForm(spider,1:3,13:15,FUN=sqrt)
+makeform(spider,1:3,13:15,FUN=sqrt)
 # sqrt(cbind(arct.lute, pard.lugu, zora.spin)) ~ water + sand + moss
 
-makeForm(spider,1:3,13:15,FUN=sqrt,extra="I(water^2)+")
+makeform(spider,1:3,13:15,FUN=sqrt,extra="I(water^2)+")
 # sqrt(cbind(arct.lute, pard.lugu, zora.spin)) ~ I(water^2) + water + 
 # sand + moss
 

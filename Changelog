@@ -1,2 +1,7 @@
-2006 Aug 23         1.2.1   Fixed cmds.diss to pass arguments to xdiss and gdist functions
+2103 April 15       1.6.1   Remove use of "assign" and pass parameters by name
+2012 Feb 18			1.6-0	Fix up splitting error in mrt.c
+2011 Mar 11			1.4-0	Problem with MAC versions ???? -- No false alarm :-)
+2010 Feb 28			1.3-1	Fix in format.g required for summary of rpart.dist objects
+2009 Dec 			1.3-0	Fix documentation to pass R checks & warnings
+2006 Aug 23         1.2-1   Fixed cmds.diss to pass arguments to xdiss and gdist functions
 2004 November 11    1.0-1   Modified extension of rpart

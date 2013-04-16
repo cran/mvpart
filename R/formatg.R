@@ -14,6 +14,6 @@ function(x, digits= unlist(options('digits')),
                           rep(format,n),
                           out= rep(dummy, n), NAOK=TRUE, PACKAGE="mvpart")$out
     if (is.matrix(x)) matrix(temp, nrow=nrow(x))
-    else temp
+    else matrix(temp,nrow=1)
     }
 

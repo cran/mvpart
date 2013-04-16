@@ -1,7 +1,10 @@
-"snip.rpart.mouse" <-
-function(tree,
-              parms=paste(".rpart.parms", dev.cur(), sep = ".")) {
-    xy <- rpartco(tree)
+"snip.rpart.mouse" <- function(tree, parms) {
+#~     parms=paste(".rpart.parms", dev.cur(), sep = ".")) {
+    xy <- rpartco(tree,parms)
+     uniform <- parms$uniform
+     nspace <- parms$nspace
+     nbranch <- parms$nbranch
+     minbranch <- parms$minbranch
     toss <- NULL
     ff <- tree$frame
     if (exists(parms, envir=.GlobalEnv)) {

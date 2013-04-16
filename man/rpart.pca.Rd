@@ -7,7 +7,7 @@ Principle Components Plot of a Multivariate Rpart Object
 Plots a PCA of the rpart object on the current graphics device.
 }
 \usage{
-\method{rpart}{pca}(tree, pts = TRUE, plt.allx = TRUE, speclab = TRUE,
+\method{rpart}{pca}(tree, pts = TRUE, plt.allx = TRUE, speclabs = TRUE,
     specvecs = TRUE, wgt.ave = FALSE, add.tree = TRUE,  
     cv1 = 1, cv2 = 2, chulls = TRUE, interact = FALSE, \dots) 
 }
@@ -22,7 +22,7 @@ If \code{TRUE}, large points representing the leaf means are plotted.
 \item{plt.allx}{
 If \code{TRUE}, small points representing individual cases are plotted.
 }
-\item{speclab}{
+\item{speclabs}{
 If \code{TRUE} the labels of the response variables are plotted.
 }
 \item{specvecs}{

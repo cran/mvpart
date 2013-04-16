@@ -4,28 +4,28 @@
 Recursive Partitioning and Regression Trees
 }
 \description{
-Wrapper function for fitting and plotting \code{rpart} models 
+Wrapper function for fitting and plotting \code{rpart} models
 }
 
 \usage{
-mvpart(form, data, minauto = TRUE, size, xv = c("1se", "min", 
-    "pick", "none"), xval = 10, xvmult = 0, xvse = 1, snip = FALSE, 
-    plot.add = TRUE, text.add = TRUE, digits = 3, margin = 0, 
-    uniform = FALSE, which = 4, pretty = TRUE, use.n = TRUE, 
-    all.leaves = FALSE, bars = TRUE, legend, bord = FALSE, 
-    xadj = 1, yadj = 1, prn = FALSE, branch = 1, rsq = FALSE, 
-    big.pts = FALSE, pca = FALSE, interact.pca = FALSE, 
-    wgt.ave.pca = FALSE, keep.y = TRUE, \dots) 
+mvpart(form, data, minauto = TRUE, size, xv = c("1se", "min",
+    "pick", "none"), xval = 10, xvmult = 0, xvse = 1, snip = FALSE,
+    plot.add = TRUE, text.add = TRUE, digits = 3, margin = 0,
+    uniform = FALSE, which = 4, pretty = TRUE, use.n = TRUE,
+    all.leaves = FALSE, bars = TRUE, legend, bord = FALSE,
+    xadj = 1, yadj = 1, prn = FALSE, branch = 1, rsq = FALSE,
+    big.pts = FALSE, pca = FALSE, interact.pca = FALSE,
+    wgt.ave.pca = FALSE, keep.y = TRUE, \dots)
 }
 
 \arguments{
 \item{form}{
-As for \code{rpart} function. 
+As for \code{rpart} function.
 Arguments to rpart can be passed by \dots.
 }
 \item{data}{
-Optional data frame in which to interpret the variables named in the 
-formula 
+Optional data frame in which to interpret the variables named in the
+formula
 }
 \item{minauto}{
 If \code{TRUE} uses smart minsplit and minbucket based on N cases.
@@ -43,7 +43,7 @@ Number of cross-validations or vector defining cross-validation groups.
 }
 
 \item{xvmult}{
-Number of multiple cross-validations. 
+Number of multiple cross-validations.
 }
 \item{xvse}{
 Multiplier for the number of SEs used for \code{xv = "1se"}.
@@ -120,7 +120,7 @@ If \code{TRUE} y values are returned.
 }
 
 \value{
-an object of class \code{rpart}, a superset of class \code{tree}. 
+an object of class \code{rpart}, a superset of class tree.
 }
 
 \seealso{
@@ -128,10 +128,13 @@ an object of class \code{rpart}, a superset of class \code{tree}.
 }
 \examples{
 data(spider)
-mvpart(data.matrix(spider[,1:12])~herbs+reft+moss+sand+twigs+water,spider)       # defaults         
-mvpart(data.matrix(spider[,1:12])~herbs+reft+moss+sand+twigs+water,spider,xv="p")  # pick the tree size
+mvpart(data.matrix(spider[,1:12])~herbs+reft+moss+sand+twigs+
+water,spider)       # defaults
+mvpart(data.matrix(spider[,1:12])~herbs+reft+moss+sand+twigs+
+water,spider,xv="p")  # pick the tree size
 # pick cv size and do PCA
-fit <- mvpart(data.matrix(spider[,1:12])~herbs+reft+moss+sand+twigs+water,spider,xv="1se",pca=TRUE)  
-rpart.pca(fit,interact=TRUE,wgt.ave=TRUE) # interactive PCA plot of saved multivariate tree 
+fit <- mvpart(data.matrix(spider[,1:12])~herbs+reft+moss+sand+
+twigs+water,spider,xv="1se",pca=TRUE)
+rpart.pca(fit,interact=TRUE,wgt.ave=TRUE) # interactive PCA plot of saved multivariate tree
 }
 \keyword{tree}
