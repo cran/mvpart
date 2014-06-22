@@ -34,7 +34,7 @@ static int debug =0;    /*if it is odd, print out every tree */
 extern char *xname[];
 #endif
 
-void xval(int n_xval,  struct cptable *cptable_head,  Sint *x_grp, 
+void xval(int n_xval,  struct cptable *cptable_head,  Sint *x_grp,
       int maxcat,  char **error,                  double * parms)
     {
     int i,j,k, jj;
@@ -122,7 +122,7 @@ void xval(int n_xval,  struct cptable *cptable_head,  Sint *x_grp,
         rundown(xtree, j, cp, xpred, xtemp);
         if (debug >1) {
            jj = j+1;
-           printf("\nObs %d, y=%f \n", jj, rp.ydata[j][0]);
+        /*   printf("\nObs %d, y=%f \n", jj, rp.ydata[j][0]); */
            }
         /* add it in to the risk */
         cplist = cptable_head;

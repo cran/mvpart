@@ -1,35 +1,26 @@
 \name{spider}
 \alias{spider}
 \title{Spider Data}
+
 \description{
-  The \code{spider} data frame has 28 rows and 18 columns. 
-  The first 12 columns are abundances of different species of spiders
-  and the next 6 are environmental data.
+Data set on abundances of spiders and environmental predictors.
+All variables are rated on a 0-9 scale.
 }
-\usage{
-data(spider)
-}
+\usage{data(spider)}
 \format{
-This data frame contains the following columns:
-\describe{
-\item{\code{arct.lute, pard.lugu, zora.spin, pard.nigr, pard.pull,
- aulo.albi, troc.terr, alop.cune, pard.mont, alop.acce,
- alop.fabr, arct.peri }}{
-numeric vectors giving the abundances of 12 species of spider
-}
-\item{\code{water, sand, moss, reft, twigs, herbs}}{
-numeric vectors giving the values of 6 environmental characteristics
-}}
+  A data frame with 28 observations with 12 species and
+  6 environmental predictors.
 }
 
 \source{
-   Van der Aart, P. J. and N. Smeeck-Enserink. 1975. 
-   Correlations between distributions of hunting spiders (Lycosidae, Ctenidae) 
-   and environmental characteristics in a dune area.  
+   Van der Aart, P. J. and N. Smeeck-Enserink. 1975.
+   Correlations between distributions of hunting spiders
+   (Lycosidae, Ctenidae) and environmental characteristics
+   in a dune area.
    Netherlands Journal of Zoology. 25:1-45.
 
    These data were analysed using multivariate trees in
-   De'ath, G. 2002. Multivariate Regression Trees: 
+   De'ath, G. 2002. Multivariate Regression Trees:
    A New Technique for Modelling Species-Environment Relationships.
    Ecology. 83(4):1103-1117
 }

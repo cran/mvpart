@@ -57,7 +57,8 @@ mvpart(gdist(spider[,1:12],meth="euc",full=TRUE,sq=TRUE)~water+twigs
 mvpart(cmds.diss(spider[,1:12],meth="euc")~water+twigs+reft
 +herbs+moss+sand,spider,method="mrt",size=5)
 
-# try with some other measure of dissimilarity eg extended bray-curtis -- the result will differ
+# try with some other measure of dissimilarity
+# eg extended bray-curtis -- the result will differ
 # between methods
 
 }

@@ -135,6 +135,7 @@ water,spider,xv="p")  # pick the tree size
 # pick cv size and do PCA
 fit <- mvpart(data.matrix(spider[,1:12])~herbs+reft+moss+sand+
 twigs+water,spider,xv="1se",pca=TRUE)
-rpart.pca(fit,interact=TRUE,wgt.ave=TRUE) # interactive PCA plot of saved multivariate tree
+rpart.pca(fit,interact=TRUE,wgt.ave=TRUE)
+# interactive PCA plot of saved multivariate tree
 }
 \keyword{tree}

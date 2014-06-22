@@ -1,35 +1,36 @@
 \name{plotcp}
 \alias{plotcp}
 \title{
-  Plot a Complexity Parameter Table for an Rpart Fit 
+  Plot a Complexity Parameter Table for an Rpart Fit
 }
 \description{
-Gives a visual representation of the cross-validation results in an 
-\code{rpart} object. 
+Gives a visual representation of the cross-validation results in an
+\code{rpart} object.
 }
 \usage{
-plotcp(x, xvse = 1, minline = TRUE, lty = 3, col = 1, upper = c("size", 
-    "splits", "none"), tab, resub.err = TRUE, adj.df = FALSE, ...) 
+plotcp(x, xvse = 1, minline = TRUE, lty = 3, col = 1,
+  upper = c("size","splits", "none"), tab, resub.err = TRUE,
+  adj.df = FALSE, ...)
 }
 \arguments{
 \item{x}{
-an object of class \code{rpart} 
+an object of class \code{rpart}
 }
 \item{xvse}{
-multiplier for xvse * SE above the minimum of the curve. 
+multiplier for xvse * SE above the minimum of the curve.
 }
 \item{minline}{
-whether a horizontal line is drawn 1SE above the minimum of the curve. 
+whether a horizontal line is drawn 1SE above the minimum of the curve.
 }
 \item{lty}{
-type of lines used in plot, default = 3. 
+type of lines used in plot, default = 3.
 }
 \item{col}{
-color of lines, default =1. 
+color of lines, default =1.
 }
 \item{upper}{
 what is plotted on the top axis: the size of the tree (the number of
-leaves), the number of splits or nothing. 
+leaves), the number of splits or nothing.
 }
 \item{tab}{
 used for multiple cross-validation.
@@ -41,14 +42,14 @@ use resubstitution error for calculations of SEs.
 adjust df of resubstitution error estimate for calculations of SEs.
 }
 \item{\dots}{
-additional plotting parameters 
+additional plotting parameters
 }
 }
 \value{
-None. 
+None.
 }
 \section{Side Effects}{
-A plot is produced on the current graphical device. 
+A plot is produced on the current graphical device.
 }
 \details{
 The set of possible cost-complexity prunings of a tree from a nested
@@ -61,7 +62,7 @@ by this function. A good choice of \code{cp} for pruning is often the
 leftmost value for which the mean lies below the horizontal line.
 }
 \seealso{
-\code{\link{rpart}},  \code{\link{printcp}},  \code{\link{rpart.object}}   
+\code{\link{rpart}},  \code{\link{printcp}},  \code{\link{rpart.object}}
 }
 \keyword{tree}
 % docclass is function
